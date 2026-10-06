@@ -500,6 +500,54 @@
 
 
   <!-- ==========================================
+       APP 8: COUNTDOWN HARI BESAR
+  =========================================== -->
+  <div id="app-countdown" class="tool-section max-w-md mx-auto">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100 text-center">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 text-amber-600 mb-4 shadow-inner">
+        <i class="fa-solid fa-hourglass-half text-3xl"></i>
+      </div>
+      <h2 class="text-2xl font-black text-gray-900">Hitung Mundur</h2>
+      <p class="text-xs text-gray-500 mt-2 mb-6">Waktu menuju hari-hari besar umat Islam</p>
+      
+      <select id="countdown-event" onchange="startCountdown()" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-200 transition-all font-bold text-gray-800 mb-6 cursor-pointer">
+        <option value="2027-03-10T00:00:00">Ramadhan 1448 H (10 Mar 2027)</option>
+        <option value="2027-04-09T00:00:00">Idul Fitri 1448 H (9 Apr 2027)</option>
+        <option value="2027-06-16T00:00:00">Idul Adha 1448 H (16 Jun 2027)</option>
+      </select>
+
+      <div class="grid grid-cols-4 gap-2 mb-6">
+        <div class="bg-gradient-to-b from-amber-50 to-amber-100/50 rounded-xl p-3 border border-amber-100 shadow-sm flex flex-col items-center justify-center">
+          <span id="cd-days" class="text-2xl sm:text-3xl font-black text-amber-600 mb-1">00</span>
+          <span class="text-[9px] font-bold text-amber-800 uppercase tracking-widest">Hari</span>
+        </div>
+        <div class="bg-gradient-to-b from-amber-50 to-amber-100/50 rounded-xl p-3 border border-amber-100 shadow-sm flex flex-col items-center justify-center">
+          <span id="cd-hours" class="text-2xl sm:text-3xl font-black text-amber-600 mb-1">00</span>
+          <span class="text-[9px] font-bold text-amber-800 uppercase tracking-widest">Jam</span>
+        </div>
+        <div class="bg-gradient-to-b from-amber-50 to-amber-100/50 rounded-xl p-3 border border-amber-100 shadow-sm flex flex-col items-center justify-center">
+          <span id="cd-mins" class="text-2xl sm:text-3xl font-black text-amber-600 mb-1">00</span>
+          <span class="text-[9px] font-bold text-amber-800 uppercase tracking-widest">Menit</span>
+        </div>
+        <div class="bg-gradient-to-b from-amber-50 to-amber-100/50 rounded-xl p-3 border border-amber-100 shadow-sm flex flex-col items-center justify-center">
+          <span id="cd-secs" class="text-2xl sm:text-3xl font-black text-amber-600 mb-1">00</span>
+          <span class="text-[9px] font-bold text-amber-800 uppercase tracking-widest">Detik</span>
+        </div>
+      </div>
+      
+      <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-100 text-left flex gap-4 items-center">
+        <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center shrink-0">
+          <i class="fa-solid fa-moon text-emerald-600 text-lg"></i>
+        </div>
+        <p class="text-[10px] sm:text-xs text-emerald-800 leading-relaxed font-medium">
+          "Ya Allah, berkahilah kami di bulan Rajab dan Sya'ban, serta sampaikanlah kami ke bulan Ramadhan." (HR. Ahmad)
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
        ROUTER & LOGIC JAVASCRIPT
   =========================================== -->
   <script>
@@ -1181,12 +1229,59 @@
       if (navigator.vibrate) navigator.vibrate(50);
     }
 
+    // ==========================================
+    // LOGIKA APP 8: COUNTDOWN HARI BESAR
+    // ==========================================
+    let countdownTimer;
+    function startCountdown() {
+      clearInterval(countdownTimer);
+      const selectElem = document.getElementById('countdown-event');
+      if(!selectElem) return;
+      const targetDate = new Date(selectElem.value).getTime();
+
+      // Jalankan sekali di awal agar tidak delay 1 detik
+      updateTimer(targetDate);
+      
+      countdownTimer = setInterval(() => {
+        updateTimer(targetDate);
+      }, 1000);
+    }
+
+    function updateTimer(targetDate) {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        clearInterval(countdownTimer);
+        document.getElementById('cd-days').innerText = "00";
+        document.getElementById('cd-hours').innerText = "00";
+        document.getElementById('cd-mins').innerText = "00";
+        document.getElementById('cd-secs').innerText = "00";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById('cd-days').innerText = days.toString().padStart(2, '0');
+      document.getElementById('cd-hours').innerText = hours.toString().padStart(2, '0');
+      document.getElementById('cd-mins').innerText = minutes.toString().padStart(2, '0');
+      document.getElementById('cd-secs').innerText = seconds.toString().padStart(2, '0');
+    }
+
     // Inisialisasi saat halaman dimuat
     window.onload = () => {
       initApp();
       loadQadhaData(); 
       initRuqyah();
       initSilsilah();
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('app') === 'countdown') {
+        startCountdown();
+      }
     };
   </script>
 </body>
