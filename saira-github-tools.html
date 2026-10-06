@@ -340,6 +340,72 @@
 
 
   <!-- ==========================================
+       APP 5: TARGET KHATAM PLANNER
+  =========================================== -->
+  <div id="app-khatam" class="tool-section max-w-md mx-auto">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-4 shadow-inner">
+          <i class="fa-solid fa-bullseye text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-black text-gray-900">Khatam Planner</h2>
+        <p class="text-xs text-gray-500 mt-2">Kalkulator pembagian tilawah per hari/waktu sholat</p>
+      </div>
+
+      <div class="space-y-5">
+        <!-- Input Target Hari -->
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-2">Target Khatam (Dalam Berapa Hari?)</label>
+          <div class="relative">
+            <input type="number" id="khatam-hari" value="30" min="1" max="365" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all text-center font-bold text-gray-800" placeholder="Misal: 30">
+            <div class="absolute right-4 top-3 text-xs font-bold text-gray-400">Hari</div>
+          </div>
+        </div>
+
+        <button onclick="hitungKhatam()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-emerald-600/30 transition-all active:scale-95 flex items-center justify-center gap-2 text-sm">
+          <i class="fa-solid fa-calculator"></i> Hitung Target
+        </button>
+
+        <!-- Hasil Output -->
+        <div id="khatam-result" class="hidden animate-[fadeIn_0.3s_ease-out]">
+          <hr class="border-gray-100 my-4">
+          
+          <div class="bg-gray-50 rounded-2xl p-4 border border-gray-200 mb-4 text-center">
+            <h4 class="text-xs font-bold text-gray-500 mb-1">Mushaf Standar Madinah (30 Juz)</h4>
+            <div class="text-2xl font-black text-emerald-600 mb-1">604 <span class="text-sm font-bold text-gray-500">Halaman</span></div>
+            <p class="text-[10px] text-gray-400">Atau sekitar 302 Lembar</p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 mb-4">
+            <div class="bg-blue-50 border border-blue-100 rounded-xl p-3 text-center">
+              <i class="fa-solid fa-calendar-day text-blue-500 mb-2 text-lg"></i>
+              <p class="text-[10px] font-bold text-gray-500 mb-1">Target Per Hari</p>
+              <div class="text-lg font-black text-gray-800" id="res-hari-hal">0</div>
+              <p class="text-[10px] text-gray-500 font-medium" id="res-hari-lbr">0 Lembar</p>
+            </div>
+            <div class="bg-amber-50 border border-amber-100 rounded-xl p-3 text-center">
+              <i class="fa-solid fa-mosque text-amber-500 mb-2 text-lg"></i>
+              <p class="text-[10px] font-bold text-gray-500 mb-1">Tiap Waktu Sholat</p>
+              <div class="text-lg font-black text-gray-800" id="res-sholat-hal">0</div>
+              <p class="text-[10px] text-gray-500 font-medium" id="res-sholat-lbr">0 Lembar</p>
+            </div>
+          </div>
+
+          <div class="bg-green-50 border-l-4 border-green-500 rounded-r-xl p-3 flex gap-3">
+            <div class="text-green-500 mt-0.5"><i class="fa-solid fa-lightbulb"></i></div>
+            <div>
+              <p class="text-xs font-bold text-gray-800 mb-1">Tips Saira!</p>
+              <p class="text-[10px] text-gray-600 leading-relaxed" id="khatam-tips">Bagi 2 target tiap sholat, baca sebelum sholat dan sesudah sholat agar terasa lebih ringan.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
        ROUTER & LOGIC JAVASCRIPT
   =========================================== -->
   <script>
@@ -824,6 +890,39 @@
         `;
       });
       container.innerHTML = html;
+    }
+
+    // ==========================================
+    // LOGIKA APP 5: KHATAM PLANNER
+    // ==========================================
+    function hitungKhatam() {
+      const hari = parseInt(document.getElementById('khatam-hari').value) || 30;
+      const totalHalaman = 604;
+      
+      const perHari = Math.ceil(totalHalaman / hari);
+      const perSholat = Math.ceil(perHari / 5); // Dibagi 5 waktu sholat
+      
+      const lbrHari = (perHari / 2).toFixed(1).replace('.0', '');
+      const lbrSholat = (perSholat / 2).toFixed(1).replace('.0', '');
+
+      document.getElementById('res-hari-hal').innerText = perHari + " Hal";
+      document.getElementById('res-hari-lbr').innerText = lbrHari + " Lembar";
+      
+      document.getElementById('res-sholat-hal').innerText = perSholat + " Hal";
+      document.getElementById('res-sholat-lbr').innerText = lbrSholat + " Lembar";
+
+      let tips = "";
+      if (perSholat > 4) {
+        tips = `Target lumayan padat bro! Cobain cicil <b>${Math.ceil(perSholat/2)} halaman sebelum sholat</b> & <b>${Math.floor(perSholat/2)} halaman sesudah sholat</b> biar kerasa enteng!`;
+      } else {
+        tips = `Masih santai ini mah! Rutinin aja baca <b>${perSholat} halaman tiap habis salam</b> sholat fardhu. Dijamin tembus ${hari} hari khatam!`;
+      }
+      document.getElementById('khatam-tips').innerHTML = tips;
+
+      document.getElementById('khatam-result').classList.remove('hidden');
+      
+      // Haptic feedback
+      if (navigator.vibrate) navigator.vibrate(50);
     }
 
     // Inisialisasi saat halaman dimuat
