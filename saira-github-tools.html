@@ -245,6 +245,57 @@
     </div>
   </div>
 
+  <!-- ==========================================
+       APP 3: AUDIO RUQYAH SYARIYYAH
+  =========================================== -->
+  <div id="app-ruqyah" class="tool-section max-w-md mx-auto">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100 overflow-hidden relative">
+      <!-- Background Decorative -->
+      <div class="absolute -right-10 -top-10 w-40 h-40 bg-green-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none"></div>
+      
+      <div class="text-center mb-8 relative z-10">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-tr from-green-600 to-emerald-400 text-white mb-4 shadow-xl shadow-green-500/30">
+          <i class="fa-solid fa-headphones text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-black text-gray-900">Ruqyah Syariyyah</h2>
+        <p class="text-xs text-gray-500 mt-2">Dengarkan ayat-ayat perlindungan (Misyari Rasyid Al-Afasy)</p>
+      </div>
+
+      <div class="relative z-10 bg-gray-50 rounded-2xl p-4 border border-gray-100 mb-6">
+        <div class="text-center mb-4">
+          <h4 id="ruqyah-title" class="font-bold text-gray-800 text-lg">Al-Fatihah</h4>
+          <p id="ruqyah-subtitle" class="text-xs text-gray-500">Pembuka (Ayat Ruqyah Inti)</p>
+        </div>
+
+        <!-- Audio Element -->
+        <audio id="ruqyah-audio" src="https://equran.nos.wjv-1.neo.id/audio-full/Misyari-Rasyid-Al-Afasi/001.mp3"></audio>
+        
+        <!-- Progress Bar -->
+        <div class="flex items-center gap-3 mb-4">
+          <span id="ruqyah-curr" class="text-[10px] font-bold text-gray-400 w-8">00:00</span>
+          <div class="flex-1 h-2 bg-gray-200 rounded-full cursor-pointer relative" onclick="seekRuqyah(event)">
+            <div id="ruqyah-progress" class="absolute top-0 left-0 h-full bg-green-500 rounded-full w-0 pointer-events-none transition-all duration-100"></div>
+          </div>
+          <span id="ruqyah-dur" class="text-[10px] font-bold text-gray-400 w-8">00:00</span>
+        </div>
+
+        <!-- Controls -->
+        <div class="flex items-center justify-center gap-6">
+          <button onclick="prevRuqyah()" class="text-gray-400 hover:text-green-600 transition-colors active:scale-95"><i class="fa-solid fa-backward-step text-xl"></i></button>
+          <button onclick="toggleRuqyah()" id="ruqyah-play-btn" class="w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center text-xl shadow-lg shadow-green-500/40 transition-transform active:scale-95">
+            <i class="fa-solid fa-play ml-1"></i>
+          </button>
+          <button onclick="nextRuqyah()" class="text-gray-400 hover:text-green-600 transition-colors active:scale-95"><i class="fa-solid fa-forward-step text-xl"></i></button>
+        </div>
+      </div>
+
+      <!-- Playlist -->
+      <div class="space-y-2 relative z-10 max-h-48 overflow-y-auto pr-1" id="ruqyah-playlist">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
 
   <!-- ==========================================
        ROUTER & LOGIC JAVASCRIPT
@@ -429,12 +480,141 @@
 
       resultList.innerHTML = html;
       resultBox.classList.remove('hidden');
+      resultBox.classList.remove('hidden');
+    }
+
+    // 4. AUDIO RUQYAH LOGIC
+    const ruqyahPlaylist = [
+      { id: "001", title: "Al-Fatihah", subtitle: "Pembuka (Ayat Ruqyah Inti)" },
+      { id: "002", title: "Al-Baqarah", subtitle: "Pengusir Setan & Sihir" },
+      { id: "112", title: "Al-Ikhlas", subtitle: "Kemurnian Keesaan Allah" },
+      { id: "113", title: "Al-Falaq", subtitle: "Perlindungan dari Kejahatan" },
+      { id: "114", title: "An-Nas", subtitle: "Perlindungan dari Bisikan Setan" }
+    ];
+
+    let currentRuqyahIdx = 0;
+    let audioRuqyah = null;
+    let isRuqyahPlaying = false;
+
+    function initRuqyah() {
+      audioRuqyah = document.getElementById('ruqyah-audio');
+      if(!audioRuqyah) return;
+      
+      // Render Playlist
+      const listContainer = document.getElementById('ruqyah-playlist');
+      let html = '';
+      ruqyahPlaylist.forEach((item, index) => {
+        html += `
+          <div onclick="playRuqyahIdx(${index})" id="ruqyah-item-${index}" class="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all ${index === 0 ? 'bg-green-50 border border-green-200' : 'bg-white border border-gray-100 hover:bg-gray-50'}">
+            <div class="w-8 h-8 rounded-full ${index === 0 ? 'bg-green-500 text-white' : 'bg-gray-100 text-gray-500'} flex items-center justify-center text-xs font-bold shrink-0 transition-colors">
+              ${index === 0 ? '<i class="fa-solid fa-volume-high"></i>' : (index + 1)}
+            </div>
+            <div>
+              <h5 class="font-bold text-sm ${index === 0 ? 'text-green-800' : 'text-gray-700'}">${item.title}</h5>
+              <p class="text-[10px] text-gray-500">${item.subtitle}</p>
+            </div>
+          </div>
+        `;
+      });
+      listContainer.innerHTML = html;
+
+      // Audio Event Listeners
+      audioRuqyah.addEventListener('timeupdate', updateRuqyahProgress);
+      audioRuqyah.addEventListener('loadedmetadata', () => {
+        document.getElementById('ruqyah-dur').innerText = formatTime(audioRuqyah.duration);
+      });
+      audioRuqyah.addEventListener('ended', nextRuqyah);
+    }
+
+    function playRuqyahIdx(index) {
+      currentRuqyahIdx = index;
+      const track = ruqyahPlaylist[index];
+      
+      // Update UI
+      document.getElementById('ruqyah-title').innerText = track.title;
+      document.getElementById('ruqyah-subtitle').innerText = track.subtitle;
+      audioRuqyah.src = `https://equran.nos.wjv-1.neo.id/audio-full/Misyari-Rasyid-Al-Afasi/${track.id}.mp3`;
+      
+      // Update Playlist Style
+      ruqyahPlaylist.forEach((_, i) => {
+        const el = document.getElementById(`ruqyah-item-${i}`);
+        const iconContainer = el.querySelector('div');
+        const titleText = el.querySelector('h5');
+        if(i === index) {
+          el.className = 'flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all bg-green-50 border border-green-200';
+          iconContainer.className = 'w-8 h-8 rounded-full bg-green-500 text-white flex items-center justify-center text-xs font-bold shrink-0 transition-colors';
+          iconContainer.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
+          titleText.className = 'font-bold text-sm text-green-800';
+        } else {
+          el.className = 'flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all bg-white border border-gray-100 hover:bg-gray-50';
+          iconContainer.className = 'w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center text-xs font-bold shrink-0 transition-colors';
+          iconContainer.innerHTML = (i + 1);
+          titleText.className = 'font-bold text-sm text-gray-700';
+        }
+      });
+
+      playRuqyah();
+    }
+
+    function toggleRuqyah() {
+      if (audioRuqyah.paused) playRuqyah();
+      else pauseRuqyah();
+    }
+
+    function playRuqyah() {
+      audioRuqyah.play();
+      isRuqyahPlaying = true;
+      document.getElementById('ruqyah-play-btn').innerHTML = '<i class="fa-solid fa-pause"></i>';
+    }
+
+    function pauseRuqyah() {
+      audioRuqyah.pause();
+      isRuqyahPlaying = false;
+      document.getElementById('ruqyah-play-btn').innerHTML = '<i class="fa-solid fa-play ml-1"></i>';
+    }
+
+    function nextRuqyah() {
+      let next = currentRuqyahIdx + 1;
+      if (next >= ruqyahPlaylist.length) next = 0; // Loop kembali ke awal
+      playRuqyahIdx(next);
+    }
+
+    function prevRuqyah() {
+      let prev = currentRuqyahIdx - 1;
+      if (prev < 0) prev = ruqyahPlaylist.length - 1;
+      playRuqyahIdx(prev);
+    }
+
+    function updateRuqyahProgress() {
+      const curr = audioRuqyah.currentTime;
+      const dur = audioRuqyah.duration;
+      if (!dur) return;
+      
+      document.getElementById('ruqyah-curr').innerText = formatTime(curr);
+      const percent = (curr / dur) * 100;
+      document.getElementById('ruqyah-progress').style.width = percent + '%';
+    }
+
+    function seekRuqyah(e) {
+      const progressBar = e.currentTarget;
+      const clickX = e.offsetX;
+      const width = progressBar.clientWidth;
+      const dur = audioRuqyah.duration;
+      audioRuqyah.currentTime = (clickX / width) * dur;
+    }
+
+    function formatTime(seconds) {
+      if (isNaN(seconds)) return "00:00";
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return (m < 10 ? '0'+m : m) + ':' + (s < 10 ? '0'+s : s);
     }
 
     // Inisialisasi saat halaman dimuat
     window.onload = () => {
       initApp();
-      loadQadhaData(); // Load data Qadha jika app Qadha dibuka
+      loadQadhaData(); 
+      initRuqyah();
     };
   </script>
 </body>
