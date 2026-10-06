@@ -304,6 +304,40 @@
     </div>
   </div>
 
+  <!-- ==========================================
+       APP 4: SILSILAH 25 NABI & RASUL
+  =========================================== -->
+  <div id="app-silsilah" class="tool-section max-w-2xl mx-auto">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-100 text-amber-600 mb-4 shadow-inner">
+          <i class="fa-solid fa-diagram-project text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-black text-gray-900">Silsilah 25 Nabi & Rasul</h2>
+        <p class="text-xs text-gray-500 mt-2">Jejak sejarah para utusan Allah (Adam AS hingga Muhammad SAW)</p>
+      </div>
+
+      <!-- Filter / Legend -->
+      <div class="flex flex-wrap justify-center gap-3 mb-6">
+        <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-[10px] font-bold border border-blue-100"><i class="fa-solid fa-star text-amber-400 mr-1"></i> Ulul Azmi</span>
+        <span class="px-3 py-1 bg-gray-50 text-gray-600 rounded-full text-[10px] font-bold border border-gray-100">Utusan Biasa</span>
+      </div>
+
+      <!-- Timeline Container -->
+      <div class="relative pl-6 sm:pl-0">
+        <!-- Vertical Line (Desktop: center, Mobile: left) -->
+        <div class="hidden sm:block absolute left-1/2 top-0 bottom-0 w-1 bg-amber-100 -translate-x-1/2 rounded-full"></div>
+        <div class="sm:hidden absolute left-[15px] top-0 bottom-0 w-1 bg-amber-100 rounded-full"></div>
+
+        <div id="nabi-timeline" class="space-y-6">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
 
   <!-- ==========================================
        ROUTER & LOGIC JAVASCRIPT
@@ -724,11 +758,80 @@
       return (m < 10 ? '0'+m : m) + ':' + (s < 10 ? '0'+s : s);
     }
 
+    // ==========================================
+    // LOGIKA APP 4: SILSILAH 25 NABI
+    // ==========================================
+    const dataNabi = [
+      { no: 1, nama: "Adam AS", julukan: "Abul Basyar (Bapak Manusia)", ululAzmi: false, ket: "Manusia pertama yang diciptakan Allah SWT." },
+      { no: 2, nama: "Idris AS", julukan: "Nabi yang Membaca/Menulis", ululAzmi: false, ket: "Nabi pertama yang menulis dengan pena dan menjahit pakaian." },
+      { no: 3, nama: "Nuh AS", julukan: "Abul Anbiya' (Kakek Para Nabi)", ululAzmi: true, ket: "Berdakwah 950 tahun, diselamatkan dari banjir bandang besar dengan bahtera." },
+      { no: 4, nama: "Hud AS", julukan: "Utusan untuk Kaum 'Aad", ululAzmi: false, ket: "Diutus kepada kaum 'Aad yang sombong dan dihancurkan oleh angin topan." },
+      { no: 5, nama: "Shaleh AS", julukan: "Utusan untuk Kaum Tsamud", ululAzmi: false, ket: "Diberi mukjizat unta betina yang keluar dari batu karang." },
+      { no: 6, nama: "Ibrahim AS", julukan: "Khalilullah (Kekasih Allah)", ululAzmi: true, ket: "Bapak para Nabi. Tidak hangus dibakar api Raja Namrud. Membangun Ka'bah bersama Nabi Ismail." },
+      { no: 7, nama: "Luth AS", julukan: "Keponakan Nabi Ibrahim", ululAzmi: false, ket: "Diutus kepada kaum Sodom yang melakukan perbuatan menyimpang." },
+      { no: 8, nama: "Ismail AS", julukan: "Putra Ibrahim dari Siti Hajar", ululAzmi: false, ket: "Rela disembelih karena ketaatan kepada Allah, lalu diganti domba. Moyang bangsa Arab." },
+      { no: 9, nama: "Ishaq AS", julukan: "Putra Ibrahim dari Siti Sarah", ululAzmi: false, ket: "Moyang bangsa Bani Israil. Ayah dari Nabi Ya'qub." },
+      { no: 10, nama: "Ya'qub AS", julukan: "Isra'il", ululAzmi: false, ket: "Ayah dari Nabi Yusuf, yang sabar menghadapi anak-anaknya yang mendengki Yusuf." },
+      { no: 11, nama: "Yusuf AS", julukan: "Pemilik Separuh Ketampanan Dunia", ululAzmi: false, ket: "Mampu menakwilkan mimpi, menjadi bendaharawan Mesir yang adil." },
+      { no: 12, nama: "Ayyub AS", julukan: "Lambang Kesabaran", ululAzmi: false, ket: "Diuji dengan penyakit parah bertahun-tahun, kehilangan harta & anak, namun tetap sabar." },
+      { no: 13, nama: "Syuaib AS", julukan: "Khatibul Anbiya (Juru Bicara Para Nabi)", ululAzmi: false, ket: "Diutus ke penduduk Madyan yang suka curang dalam timbangan." },
+      { no: 14, nama: "Musa AS", julukan: "Kalimullah (Yang Diajak Bicara Oleh Allah)", ululAzmi: true, ket: "Menerima Taurat, membelah lautan, menenggelamkan Fir'aun." },
+      { no: 15, nama: "Harun AS", julukan: "Pendamping Nabi Musa", ululAzmi: false, ket: "Kakak Nabi Musa yang fasih bicaranya, diangkat menjadi Nabi untuk mendampingi Musa." },
+      { no: 16, nama: "Dzulkifli AS", julukan: "Sang Sanggup (Memenuhi Janji)", ululAzmi: false, ket: "Seorang raja yang sangat sabar, adil, dan selalu berpuasa di siang hari." },
+      { no: 17, nama: "Daud AS", julukan: "Penakluk Besi & Pemilik Suara Merdu", ululAzmi: false, ket: "Menerima kitab Zabur. Mampu melunakkan besi dengan tangan kosong." },
+      { no: 18, nama: "Sulaiman AS", julukan: "Raja Segala Makhluk", ululAzmi: false, ket: "Putra Nabi Daud. Menundukkan angin, jin, dan bisa berbicara dengan hewan." },
+      { no: 19, nama: "Ilyas AS", julukan: "Utusan untuk Penyembah Baal", ululAzmi: false, ket: "Diutus kepada kaum Bani Israil penyembah berhala Ba'l." },
+      { no: 20, nama: "Ilyasa AS", julukan: "Penerus Nabi Ilyas", ululAzmi: false, ket: "Melanjutkan dakwah pamannya (Nabi Ilyas) memimpin kaum Bani Israil." },
+      { no: 21, nama: "Yunus AS", julukan: "Dzun Nun (Orang yang Ditelan Ikan)", ululAzmi: false, ket: "Meninggalkan kaumnya lalu ditelan ikan paus besar, dan bertobat di dalam perut ikan." },
+      { no: 22, nama: "Zakariya AS", julukan: "Penjaga Maryam", ululAzmi: false, ket: "Baru dikaruniai putra (Nabi Yahya) pada usia yang sangat renta." },
+      { no: 23, nama: "Yahya AS", julukan: "Yang Diberi Hikmah Sejak Kecil", ululAzmi: false, ket: "Putra Nabi Zakariya. Sangat bertakwa, cerdas, dan lembut hatinya." },
+      { no: 24, nama: "Isa AS", julukan: "Ruhullah & Kalimatullah", ululAzmi: true, ket: "Lahir tanpa ayah dari perawan suci Maryam. Menerima Injil, dapat menyembuhkan orang buta." },
+      { no: 25, nama: "Muhammad SAW", julukan: "Khatamul Anbiya' (Penutup Para Nabi)", ululAzmi: true, ket: "Menerima mukjizat terbesar Al-Qur'an. Rahmatan lil 'Alamin bagi seluruh alam semesta." }
+    ];
+
+    function initSilsilah() {
+      const container = document.getElementById('nabi-timeline');
+      if(!container) return;
+      
+      let html = '';
+      dataNabi.forEach((nabi, index) => {
+        const isLeft = index % 2 === 0; // Untuk selang-seling di desktop
+        
+        // CSS beda buat Ulul Azmi
+        const boxClass = nabi.ululAzmi ? "bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 shadow-md" : "bg-white border border-gray-100 shadow-sm";
+        const dotClass = nabi.ululAzmi ? "bg-blue-500 ring-4 ring-blue-100" : "bg-amber-400 ring-4 ring-amber-50";
+        const starIcon = nabi.ululAzmi ? `<i class="fa-solid fa-star text-amber-400 absolute -top-2 -right-2 text-xl drop-shadow-sm"></i>` : "";
+        
+        html += `
+          <div class="relative flex items-center justify-between sm:justify-center w-full">
+            
+            <!-- DOT (Desktop: Center, Mobile: Left) -->
+            <div class="absolute sm:left-1/2 left-[-16px] w-6 h-6 rounded-full ${dotClass} z-10 -translate-x-1/2 sm:translate-x-[-50%] flex items-center justify-center border-2 border-white">
+              <span class="text-[8px] font-bold text-white">${nabi.no}</span>
+            </div>
+
+            <!-- CARD -->
+            <div class="w-full sm:w-1/2 ${isLeft ? 'sm:pr-10 sm:text-right' : 'sm:pl-10 sm:ml-auto'} ml-6 sm:ml-0">
+              <div class="${boxClass} p-4 rounded-2xl relative transition-transform hover:-translate-y-1">
+                ${starIcon}
+                <h4 class="font-bold text-gray-800 text-base">${nabi.no}. ${nabi.nama}</h4>
+                <p class="text-[11px] font-semibold text-gray-500 mb-2">${nabi.julukan}</p>
+                <p class="text-xs text-gray-600 leading-relaxed">${nabi.ket}</p>
+              </div>
+            </div>
+
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
     // Inisialisasi saat halaman dimuat
     window.onload = () => {
       initApp();
       loadQadhaData(); 
       initRuqyah();
+      initSilsilah();
     };
   </script>
 </body>
