@@ -290,6 +290,13 @@
         </div>
       </div>
 
+      <!-- Teks Ayat (Auto Load) -->
+      <div id="ruqyah-text-box" class="relative z-10 bg-white rounded-2xl p-4 border border-gray-100 mb-6 hidden shadow-sm max-h-64 overflow-y-auto">
+        <div id="ruqyah-text-content" class="text-center space-y-4">
+          <!-- Teks disuntikkan via JS -->
+        </div>
+      </div>
+
       <!-- Playlist -->
       <div class="space-y-2 relative z-10 max-h-48 overflow-y-auto pr-1" id="ruqyah-playlist">
         <!-- Injected via JS -->
@@ -489,32 +496,46 @@
       { 
         title: "Al-Fatihah", 
         subtitle: "Pembuka (Ayat Ruqyah Inti)",
-        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/001.mp3"
+        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/001.mp3",
+        surat: 1,
+        isFull: true
       },
       { 
         title: "Ayat Kursi", 
         subtitle: "Al-Baqarah 255 (Penjagaan Total)",
-        url: "https://cdn.equran.id/audio-partial/Misyari-Rasyid-Al-Afasi/002255.mp3"
+        url: "https://cdn.equran.id/audio-partial/Misyari-Rasyid-Al-Afasi/002255.mp3",
+        surat: 2,
+        ayat: 255,
+        isFull: false
       },
       { 
         title: "Al-Baqarah (Full)", 
         subtitle: "Pengusir Setan & Sihir dari Rumah",
-        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/002.mp3"
+        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/002.mp3",
+        surat: 2,
+        isFull: true,
+        tooLong: true
       },
       { 
         title: "Al-Ikhlas", 
         subtitle: "Kemurnian Keesaan Allah",
-        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/112.mp3"
+        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/112.mp3",
+        surat: 112,
+        isFull: true
       },
       { 
         title: "Al-Falaq", 
         subtitle: "Perlindungan dari Kejahatan",
-        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/113.mp3"
+        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/113.mp3",
+        surat: 113,
+        isFull: true
       },
       { 
         title: "An-Nas", 
         subtitle: "Perlindungan dari Bisikan Setan",
-        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/114.mp3"
+        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/114.mp3",
+        surat: 114,
+        isFull: true
       }
     ];
 
@@ -580,6 +601,61 @@
       });
 
       playRuqyah();
+      fetchRuqyahText(track);
+    }
+
+    async function fetchRuqyahText(track) {
+      const textBox = document.getElementById('ruqyah-text-box');
+      const textContent = document.getElementById('ruqyah-text-content');
+      
+      if (track.tooLong) {
+        textBox.classList.remove('hidden');
+        textContent.innerHTML = `
+          <div class="text-sm text-gray-500 italic py-4">
+            <i class="fa-solid fa-book-open mb-2 text-2xl text-gray-300 block"></i>
+            Teks Surah Al-Baqarah (Full) terlalu panjang untuk ditampilkan di mini-player.<br>Silakan dengarkan audionya, atau buka fitur Al-Qur'an untuk membaca.
+          </div>
+        `;
+        return;
+      }
+
+      textBox.classList.remove('hidden');
+      textContent.innerHTML = `<div class="text-xs text-green-600 animate-pulse py-4">Memuat teks Arab...</div>`;
+
+      try {
+        const res = await fetch(`https://equran.id/api/v2/surat/${track.surat}`);
+        const data = await res.json();
+        
+        let html = '';
+        if (track.isFull) {
+          // Tampilkan semua ayat
+          data.data.ayat.forEach(a => {
+            html += `
+              <div class="border-b border-gray-50 pb-4 mb-4 last:border-0">
+                <div class="font-arabic text-2xl leading-loose text-right text-gray-800 mb-3" dir="rtl">${a.teksArab}</div>
+                <div class="text-[11px] text-gray-600 italic text-left mb-1">${a.teksLatin}</div>
+                <div class="text-xs text-gray-700 text-left">${a.teksIndonesia}</div>
+              </div>
+            `;
+          });
+        } else {
+          // Tampilkan ayat spesifik (Ayat Kursi)
+          const a = data.data.ayat.find(ay => ay.nomorAyat === track.ayat);
+          if (a) {
+            html = `
+              <div class="pb-2">
+                <div class="font-arabic text-2xl leading-loose text-right text-gray-800 mb-4 mt-2" dir="rtl">${a.teksArab}</div>
+                <div class="text-[11px] text-gray-600 italic text-left mb-2 leading-relaxed">${a.teksLatin}</div>
+                <div class="text-xs text-gray-700 text-left leading-relaxed">${a.teksIndonesia}</div>
+              </div>
+            `;
+          }
+        }
+        
+        textContent.innerHTML = html;
+      } catch (err) {
+        textContent.innerHTML = `<div class="text-xs text-red-500 py-2">Gagal memuat teks. Periksa koneksi.</div>`;
+      }
     }
 
     function toggleRuqyah() {
