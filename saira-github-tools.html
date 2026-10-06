@@ -451,6 +451,55 @@
 
 
   <!-- ==========================================
+       APP 7: GENERATOR NAMA BAYI
+  =========================================== -->
+  <div id="app-namabayi" class="tool-section max-w-md mx-auto">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-pink-100 text-pink-600 mb-4 shadow-inner">
+          <i class="fa-solid fa-baby text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-black text-gray-900">Nama Bayi Islami</h2>
+        <p class="text-xs text-gray-500 mt-2">Dapatkan inspirasi rangkaian 2 kata nama bayi beserta artinya</p>
+      </div>
+
+      <div class="space-y-4">
+        <!-- Gender Select -->
+        <div class="grid grid-cols-2 gap-3 mb-2">
+          <button id="btn-gender-L" onclick="setGender('L')" class="py-3 px-4 rounded-xl border-2 border-blue-500 bg-blue-50 text-blue-700 font-bold flex items-center justify-center gap-2 transition-all">
+            <i class="fa-solid fa-mars"></i> Laki-laki
+          </button>
+          <button id="btn-gender-P" onclick="setGender('P')" class="py-3 px-4 rounded-xl border-2 border-transparent bg-gray-50 text-gray-500 hover:bg-gray-100 font-bold flex items-center justify-center gap-2 transition-all">
+            <i class="fa-solid fa-venus"></i> Perempuan
+          </button>
+        </div>
+
+        <button onclick="generateNama()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 text-sm">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Generate Nama Baru
+        </button>
+
+        <!-- Hasil Output -->
+        <div id="nama-result" class="hidden animate-[fadeIn_0.3s_ease-out] mt-6">
+          <div class="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-6 border border-indigo-100 text-center relative overflow-hidden">
+            <!-- Dekorasi -->
+            <i class="fa-solid fa-quote-left absolute top-4 left-4 text-3xl text-indigo-200/50"></i>
+            <i class="fa-solid fa-quote-right absolute bottom-4 right-4 text-3xl text-indigo-200/50"></i>
+            
+            <p class="text-[10px] font-bold text-indigo-400 mb-2 uppercase tracking-widest" id="res-gender">Nama Bayi Laki-Laki</p>
+            <h3 class="text-2xl font-black text-indigo-900 mb-4 font-serif leading-tight" id="res-nama">Muhammad Naufal</h3>
+            
+            <div class="bg-white/60 backdrop-blur-sm rounded-xl p-3 border border-white/50">
+              <p class="text-xs font-bold text-gray-500 mb-1">Artinya:</p>
+              <p class="text-sm text-gray-800 italic" id="res-arti">"Yang terpuji, Pemuda yang dermawan"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
        ROUTER & LOGIC JAVASCRIPT
   =========================================== -->
   <script>
@@ -1054,6 +1103,81 @@
       }
 
       document.getElementById('enumber-result').classList.remove('hidden');
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
+
+    // ==========================================
+    // LOGIKA APP 7: GENERATOR NAMA BAYI
+    // ==========================================
+    let currentGender = 'L'; // Default Laki-laki
+
+    const namaLaki = [
+      { n: "Muhammad", a: "Yang terpuji" }, { n: "Ahmad", a: "Sangat terpuji" },
+      { n: "Ali", a: "Tinggi, mulia" }, { n: "Hasan", a: "Tampan, baik" },
+      { n: "Zayd", a: "Pertumbuhan" }, { n: "Omar", a: "Berumur panjang" },
+      { n: "Tariq", a: "Bintang fajar" }, { n: "Rayyan", a: "Pintu surga" },
+      { n: "Ammar", a: "Kuat imannya" }, { n: "Fatih", a: "Penakluk" },
+      { n: "Ibrahim", a: "Bapak para nabi" }, { n: "Rasyid", a: "Mendapat petunjuk" },
+      { n: "Khalid", a: "Abadi" }, { n: "Zafar", a: "Kemenangan" },
+      { n: "Ilham", a: "Wahyu, isyarat" }, { n: "Naufal", a: "Pemuda dermawan" },
+      { n: "Zayn", a: "Perhiasan" }, { n: "Rafi", a: "Yang meninggikan" },
+      { n: "Ghaisan", a: "Rupawan" }, { n: "Faiz", a: "Berjaya" },
+      { n: "Arkan", a: "Tiang agama" }, { n: "Bintang", a: "Benda langit" },
+      { n: "Daffa", a: "Pembela" }, { n: "Emir", a: "Pangeran mempesona" },
+      { n: "Farras", a: "Cerdas, tajam pikiran" }
+    ];
+
+    const namaPerempuan = [
+      { n: "Aisyah", a: "Kehidupan" }, { n: "Fatimah", a: "Menyapih" },
+      { n: "Khadijah", a: "Dapat dipercaya" }, { n: "Zahra", a: "Berseri, bercahaya" },
+      { n: "Maryam", a: "Wanita suci" }, { n: "Safiyyah", a: "Teman yang tulus" },
+      { n: "Hana", a: "Kebahagiaan" }, { n: "Laila", a: "Malam yang gelap" },
+      { n: "Nour", a: "Cahaya" }, { n: "Inaya", a: "Perhatian" },
+      { n: "Salma", a: "Selamat, damai" }, { n: "Yasmin", a: "Bunga melati" },
+      { n: "Amira", a: "Putri pemimpin" }, { n: "Nadhira", a: "Berharga" },
+      { n: "Rania", a: "Ratu" }, { n: "Syifa", a: "Penyembuh" },
+      { n: "Qisya", a: "Hidup dengan baik" }, { n: "Azalea", a: "Bunga mekar" },
+      { n: "Misha", a: "Cantik" }, { n: "Ranya", a: "Kebaikan hati" },
+      { n: "Aqila", a: "Bijaksana, pintar" }, { n: "Balqis", a: "Ratu negeri Saba" },
+      { n: "Chayra", a: "Kebaikan" }, { n: "Dania", a: "Dekat" },
+      { n: "Faiha", a: "Beraroma surgawi" }
+    ];
+
+    function setGender(g) {
+      currentGender = g;
+      const btnL = document.getElementById('btn-gender-L');
+      const btnP = document.getElementById('btn-gender-P');
+
+      if (g === 'L') {
+        btnL.className = "py-3 px-4 rounded-xl border-2 border-blue-500 bg-blue-50 text-blue-700 font-bold flex items-center justify-center gap-2 transition-all";
+        btnP.className = "py-3 px-4 rounded-xl border-2 border-transparent bg-gray-50 text-gray-500 hover:bg-gray-100 font-bold flex items-center justify-center gap-2 transition-all";
+      } else {
+        btnP.className = "py-3 px-4 rounded-xl border-2 border-pink-500 bg-pink-50 text-pink-700 font-bold flex items-center justify-center gap-2 transition-all";
+        btnL.className = "py-3 px-4 rounded-xl border-2 border-transparent bg-gray-50 text-gray-500 hover:bg-gray-100 font-bold flex items-center justify-center gap-2 transition-all";
+      }
+    }
+
+    function getRandomItem(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function generateNama() {
+      const dataSet = currentGender === 'L' ? namaLaki : namaPerempuan;
+      
+      // Ambil 2 nama yang berbeda
+      let name1 = getRandomItem(dataSet);
+      let name2 = getRandomItem(dataSet);
+      while(name1.n === name2.n) {
+        name2 = getRandomItem(dataSet);
+      }
+
+      document.getElementById('res-gender').innerText = currentGender === 'L' ? "NAMA BAYI LAKI-LAKI" : "NAMA BAYI PEREMPUAN";
+      document.getElementById('res-nama').innerText = `${name1.n} ${name2.n}`;
+      document.getElementById('res-arti').innerText = `"${name1.a}, ${name2.a.toLowerCase()}"`;
+
+      document.getElementById('nama-result').classList.remove('hidden');
+      
+      // Haptic feedback
       if (navigator.vibrate) navigator.vibrate(50);
     }
 
