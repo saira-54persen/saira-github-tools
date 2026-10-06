@@ -803,16 +803,16 @@
         const starIcon = nabi.ululAzmi ? `<i class="fa-solid fa-star text-amber-400 absolute -top-2 -right-2 text-xl drop-shadow-sm"></i>` : "";
         
         html += `
-          <div class="relative flex items-center justify-between sm:justify-center w-full">
+          <div class="relative flex items-center w-full justify-end sm:justify-start ${isLeft ? 'sm:flex-row' : 'sm:flex-row-reverse'}">
             
             <!-- DOT (Desktop: Center, Mobile: Left) -->
-            <div class="absolute sm:left-1/2 left-[-16px] w-6 h-6 rounded-full ${dotClass} z-10 -translate-x-1/2 sm:translate-x-[-50%] flex items-center justify-center border-2 border-white">
+            <div class="absolute left-[-16px] sm:left-1/2 w-6 h-6 rounded-full ${dotClass} z-10 -translate-x-0 sm:-translate-x-1/2 flex items-center justify-center border-2 border-white">
               <span class="text-[8px] font-bold text-white">${nabi.no}</span>
             </div>
 
             <!-- CARD -->
-            <div class="w-full sm:w-1/2 ${isLeft ? 'sm:pr-10 sm:text-right' : 'sm:pl-10 sm:ml-auto'} ml-6 sm:ml-0">
-              <div class="${boxClass} p-4 rounded-2xl relative transition-transform hover:-translate-y-1">
+            <div class="w-[calc(100%-2rem)] sm:w-1/2 ${isLeft ? 'sm:pr-10 sm:text-right' : 'sm:pl-10 sm:text-left'}">
+              <div class="${boxClass} p-4 rounded-2xl relative transition-transform hover:-translate-y-1 text-left ${isLeft ? 'sm:text-right' : 'sm:text-left'}">
                 ${starIcon}
                 <h4 class="font-bold text-gray-800 text-base">${nabi.no}. ${nabi.nama}</h4>
                 <p class="text-[11px] font-semibold text-gray-500 mb-2">${nabi.julukan}</p>
