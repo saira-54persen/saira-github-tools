@@ -603,6 +603,61 @@
 
 
   <!-- ==========================================
+       APP 10: KALKULATOR ZAKAT
+  =========================================== -->
+  <div id="app-zakat" class="tool-section max-w-md mx-auto">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 mb-4 shadow-inner">
+          <i class="fa-solid fa-hand-holding-dollar text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-black text-gray-900">Kalkulator Zakat</h2>
+        <p class="text-xs text-gray-500 mt-2">Hitung kewajiban zakat profesi atau maal</p>
+      </div>
+
+      <div class="space-y-4">
+        <!-- TABS -->
+        <div class="flex p-1 bg-gray-100 rounded-xl mb-4">
+          <button id="tab-zakat-profesi" onclick="switchZakat('profesi')" class="flex-1 py-2 rounded-lg text-sm font-bold transition-all bg-white text-blue-600 shadow-sm">Zakat Profesi</button>
+          <button id="tab-zakat-maal" onclick="switchZakat('maal')" class="flex-1 py-2 rounded-lg text-sm font-bold transition-all text-gray-500 hover:text-gray-700">Zakat Maal</button>
+        </div>
+
+        <div id="zakat-profesi-content">
+          <label class="block text-xs font-bold text-gray-700 mb-2">Penghasilan per Bulan</label>
+          <div class="relative">
+            <span class="absolute left-4 top-3.5 font-bold text-gray-500 text-sm">Rp</span>
+            <input type="number" id="zakat-gaji" placeholder="0" class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all font-bold">
+          </div>
+          <p class="text-[10px] text-gray-500 mt-1">*Termasuk gaji pokok, tunjangan, dan bonus</p>
+        </div>
+
+        <div id="zakat-maal-content" class="hidden">
+          <label class="block text-xs font-bold text-gray-700 mb-2">Total Harta 1 Tahun (Tabungan, Emas, dll)</label>
+          <div class="relative">
+            <span class="absolute left-4 top-3.5 font-bold text-gray-500 text-sm">Rp</span>
+            <input type="number" id="zakat-harta" placeholder="0" class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all font-bold">
+          </div>
+          <p class="text-[10px] text-gray-500 mt-1">*Harta yang telah mengendap selama 1 tahun (haul)</p>
+        </div>
+
+        <button onclick="hitungZakat()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 text-sm mt-4">
+          <i class="fa-solid fa-calculator"></i> Hitung Zakat
+        </button>
+
+        <!-- Hasil Output -->
+        <div id="zakat-result" class="hidden animate-[fadeIn_0.3s_ease-out] mt-6">
+          <div class="bg-blue-50 border border-blue-100 rounded-xl p-5 text-center">
+             <p class="text-xs font-bold text-blue-800/60 mb-2 uppercase tracking-wider">Kewajiban Zakat</p>
+             <h3 class="text-3xl font-black text-blue-600 mb-2" id="res-zakat-total">Rp 0</h3>
+             <p class="text-xs text-blue-900 font-medium leading-relaxed" id="res-zakat-desc">...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
        ROUTER & LOGIC JAVASCRIPT
   =========================================== -->
   <script>
@@ -1368,6 +1423,68 @@
       }
 
       document.getElementById('fidyah-result').classList.remove('hidden');
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
+    // ==========================================
+    // LOGIKA APP 10: KALKULATOR ZAKAT
+    // ==========================================
+    let currentZakat = 'profesi';
+
+    function switchZakat(type) {
+      currentZakat = type;
+      const btnProfesi = document.getElementById('tab-zakat-profesi');
+      const btnMaal = document.getElementById('tab-zakat-maal');
+      const contentProfesi = document.getElementById('zakat-profesi-content');
+      const contentMaal = document.getElementById('zakat-maal-content');
+
+      if (type === 'profesi') {
+        btnProfesi.className = 'flex-1 py-2 rounded-lg text-sm font-bold transition-all bg-white text-blue-600 shadow-sm';
+        btnMaal.className = 'flex-1 py-2 rounded-lg text-sm font-bold transition-all text-gray-500 hover:text-gray-700';
+        contentProfesi.classList.remove('hidden');
+        contentMaal.classList.add('hidden');
+      } else {
+        btnMaal.className = 'flex-1 py-2 rounded-lg text-sm font-bold transition-all bg-white text-blue-600 shadow-sm';
+        btnProfesi.className = 'flex-1 py-2 rounded-lg text-sm font-bold transition-all text-gray-500 hover:text-gray-700';
+        contentMaal.classList.remove('hidden');
+        contentProfesi.classList.add('hidden');
+      }
+    }
+
+    function hitungZakat() {
+      // Asumsi Nisab Zakat (85 gram emas = ~Rp 102.000.000 / tahun)
+      const nisabBulanan = 8500000;
+      const nisabTahunan = 102000000;
+      
+      const resTotal = document.getElementById('res-zakat-total');
+      const resDesc = document.getElementById('res-zakat-desc');
+      
+      if (currentZakat === 'profesi') {
+        const gaji = parseInt(document.getElementById('zakat-gaji').value) || 0;
+        if (gaji >= nisabBulanan) {
+          const zakat = gaji * 0.025;
+          resTotal.innerText = "Rp " + zakat.toLocaleString('id-ID');
+          resDesc.innerHTML = `Alhamdulillah, penghasilan Anda telah mencapai nisab.<br>Wajib dikeluarkan 2,5% per bulan.`;
+          resTotal.className = "text-3xl font-black text-blue-600 mb-2";
+        } else {
+          resTotal.innerText = "Rp 0";
+          resDesc.innerHTML = `Penghasilan Anda <b>belum mencapai nisab</b> (Rp 8.500.000/bulan). Anda belum wajib zakat profesi, namun dianjurkan bersedekah.`;
+          resTotal.className = "text-xl sm:text-2xl font-black text-gray-500 mb-2";
+        }
+      } else {
+        const harta = parseInt(document.getElementById('zakat-harta').value) || 0;
+        if (harta >= nisabTahunan) {
+          const zakat = harta * 0.025;
+          resTotal.innerText = "Rp " + zakat.toLocaleString('id-ID');
+          resDesc.innerHTML = `Alhamdulillah, harta Anda telah mencapai nisab.<br>Wajib dikeluarkan 2,5% per tahun.`;
+          resTotal.className = "text-3xl font-black text-blue-600 mb-2";
+        } else {
+          resTotal.innerText = "Rp 0";
+          resDesc.innerHTML = `Total harta Anda <b>belum mencapai nisab</b> (Rp 102.000.000/tahun). Anda belum wajib zakat maal, namun dianjurkan bersedekah.`;
+          resTotal.className = "text-xl sm:text-2xl font-black text-gray-500 mb-2";
+        }
+      }
+
+      document.getElementById('zakat-result').classList.remove('hidden');
       if (navigator.vibrate) navigator.vibrate(50);
     }
 
