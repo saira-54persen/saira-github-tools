@@ -656,6 +656,52 @@
     </div>
   </div>
 
+  <!-- ==========================================
+       APP 11: AYAT INSPIRASI HARIAN
+  =========================================== -->
+  <div id="app-inspirasi" class="tool-section max-w-md mx-auto h-full flex flex-col justify-center">
+    <div class="bg-gradient-to-br from-[#0F1F35] to-[#0B4D3C] rounded-3xl p-8 shadow-2xl relative overflow-hidden border border-[#D4A843]/30">
+      
+      <!-- Background Dekorasi -->
+      <div class="absolute -top-10 -right-10 opacity-10">
+        <i class="fa-solid fa-moon text-9xl text-[#D4A843]"></i>
+      </div>
+      <div class="absolute -bottom-10 -left-10 opacity-10">
+        <i class="fa-solid fa-star text-9xl text-[#D4A843]"></i>
+      </div>
+
+      <!-- Konten Utama -->
+      <div class="relative z-10 flex flex-col items-center text-center">
+        <div class="w-16 h-16 rounded-2xl bg-amber-500/20 text-[#FCE082] flex items-center justify-center text-2xl shadow-inner mb-6 border border-[#FCE082]/30 animate-pulse">
+          <i class="fa-solid fa-quote-right"></i>
+        </div>
+        
+        <h2 class="text-xl font-bold text-white mb-8 tracking-wide uppercase text-[#FCE082]">Ayat Inspirasi</h2>
+
+        <!-- Teks Ayat -->
+        <div class="mb-8 w-full min-h-[150px] flex flex-col items-center justify-center" id="inspirasi-container">
+          <div class="text-3xl font-amiri text-[#FCE082] leading-loose mb-6 drop-shadow-lg" id="inspirasi-arabic" dir="rtl">
+            ...
+          </div>
+          <div class="text-sm font-medium text-white/90 italic leading-relaxed" id="inspirasi-indo">
+            ...
+          </div>
+        </div>
+
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-[#D4A843]/50 to-transparent mb-6"></div>
+
+        <div class="text-xs font-bold text-[#FCE082] bg-[#D4A843]/20 px-4 py-2 rounded-full border border-[#D4A843]/30" id="inspirasi-surat">
+          -
+        </div>
+      </div>
+
+    </div>
+    
+    <button onclick="acakAyatInspirasi()" class="mt-6 w-full py-4 rounded-2xl bg-white text-[#0B4D3C] font-black text-sm uppercase tracking-widest shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all active:scale-95 flex items-center justify-center gap-2 group">
+      <i class="fa-solid fa-rotate transition-transform group-hover:rotate-180 duration-500"></i> Acak Ayat Lain
+    </button>
+  </div>
+
 
   <!-- ==========================================
        ROUTER & LOGIC JAVASCRIPT
@@ -1488,6 +1534,73 @@
       if (navigator.vibrate) navigator.vibrate(50);
     }
 
+    // ==========================================
+    // LOGIKA APP 11: AYAT INSPIRASI HARIAN
+    // ==========================================
+    const listAyatInspirasi = [
+      {
+        ar: "فَإِنَّ مَعَ الْعُسْرِ يُسْرًا",
+        id: "Karena sesungguhnya sesudah kesulitan itu ada kemudahan.",
+        surat: "QS. Al-Insyirah: 5"
+      },
+      {
+        ar: "لَا تَحْزَنْ إِنَّ اللَّهَ مَعَنَا",
+        id: "Janganlah engkau bersedih, sesungguhnya Allah bersama kita.",
+        surat: "QS. At-Taubah: 40"
+      },
+      {
+        ar: "وَهُوَ مَعَكُمْ أَيْنَ مَا كُنْتُمْ",
+        id: "Dan Dia bersama kamu di mana saja kamu berada.",
+        surat: "QS. Al-Hadid: 4"
+      },
+      {
+        ar: "لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا",
+        id: "Allah tidak membebani seseorang melainkan sesuai dengan kesanggupannya.",
+        surat: "QS. Al-Baqarah: 286"
+      },
+      {
+        ar: "وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ",
+        id: "Dan mintalah pertolongan (kepada Allah) dengan sabar dan salat.",
+        surat: "QS. Al-Baqarah: 45"
+      },
+      {
+        ar: "وَمَنْ يَتَّقِ اللَّهَ يَجْعَلْ لَهُ مَخْرَجًا",
+        id: "Barangsiapa bertakwa kepada Allah niscaya Dia akan mengadakan baginya jalan keluar.",
+        surat: "QS. At-Talaq: 2"
+      },
+      {
+        ar: "إِنَّ اللَّهَ يُحِبُّ الْمُتَوَكِّلِينَ",
+        id: "Sesungguhnya Allah menyukai orang-orang yang bertawakal kepada-Nya.",
+        surat: "QS. Ali 'Imran: 159"
+      }
+    ];
+
+    function acakAyatInspirasi() {
+      const elArabic = document.getElementById('inspirasi-arabic');
+      const elIndo = document.getElementById('inspirasi-indo');
+      const elSurat = document.getElementById('inspirasi-surat');
+      const container = document.getElementById('inspirasi-container');
+
+      // Animasi fade out
+      container.style.opacity = 0;
+      
+      setTimeout(() => {
+        // Pilih ayat random
+        const randomIndex = Math.floor(Math.random() * listAyatInspirasi.length);
+        const ayat = listAyatInspirasi[randomIndex];
+
+        elArabic.innerText = ayat.ar;
+        elIndo.innerText = ayat.id;
+        elSurat.innerText = ayat.surat;
+
+        // Animasi fade in
+        container.style.transition = 'opacity 0.5s ease';
+        container.style.opacity = 1;
+
+        if (navigator.vibrate) navigator.vibrate(30);
+      }, 300);
+    }
+
     // Inisialisasi saat halaman dimuat
     window.onload = () => {
       initApp();
@@ -1498,6 +1611,9 @@
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('app') === 'countdown') {
         startCountdown();
+      }
+      if (urlParams.get('app') === 'inspirasi') {
+        acakAyatInspirasi(); // langsung acak ayat pertama kali buka
       }
     };
   </script>
