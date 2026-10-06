@@ -406,6 +406,51 @@
 
 
   <!-- ==========================================
+       APP 6: CEK E-NUMBER HALAL
+  =========================================== -->
+  <div id="app-enumber" class="tool-section max-w-md mx-auto">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-100 text-red-600 mb-4 shadow-inner">
+          <i class="fa-solid fa-utensils text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-black text-gray-900">Cek E-Number</h2>
+        <p class="text-xs text-gray-500 mt-2">Cari tahu status Halal/Syubhat kode komposisi makanan</p>
+      </div>
+
+      <div class="space-y-4">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <i class="fa-solid fa-magnifying-glass text-gray-400"></i>
+          </div>
+          <input type="text" id="enumber-input" class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-10 pr-4 py-3 text-sm focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-200 transition-all font-bold text-gray-800 uppercase" placeholder="Ketik kode (Misal: E471 atau 471)" onkeyup="if(event.key === 'Enter') cekEnumber()">
+        </div>
+
+        <button onclick="cekEnumber()" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-red-600/30 transition-all active:scale-95 flex items-center justify-center gap-2 text-sm">
+          <i class="fa-solid fa-search"></i> Cek Status Bahan
+        </button>
+
+        <div id="enumber-result" class="hidden animate-[fadeIn_0.3s_ease-out] mt-6">
+          <div id="enumber-card" class="rounded-2xl p-5 border text-center shadow-sm">
+            <div id="enumber-icon" class="text-4xl mb-3"></div>
+            <h3 id="enumber-code" class="text-2xl font-black mb-1"></h3>
+            <span id="enumber-status" class="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3"></span>
+            <p id="enumber-desc" class="text-sm leading-relaxed"></p>
+          </div>
+          
+          <div class="mt-4 bg-gray-50 rounded-xl p-3 border border-gray-200 flex gap-3 items-start">
+            <i class="fa-solid fa-circle-info text-blue-500 mt-0.5"></i>
+            <p class="text-[10px] text-gray-500 leading-relaxed">
+              <b>Catatan:</b> Hasil pencarian ini adalah panduan umum berdasar titik kritis kehalalan (Lemak Hewani/Babi/Khamr). Selalu utamakan memilih produk yang memiliki logo <b>Halal MUI/BPJPH</b> resmi.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
        ROUTER & LOGIC JAVASCRIPT
   =========================================== -->
   <script>
@@ -922,6 +967,93 @@
       document.getElementById('khatam-result').classList.remove('hidden');
       
       // Haptic feedback
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
+
+    // ==========================================
+    // LOGIKA APP 6: CEK E-NUMBER HALAL
+    // ==========================================
+    const syubhatHaramList = {
+      // Daftar E-Number yang sering bersumber dari hewani / babi
+      "E120": { status: "Syubhat", desc: "Karmin (Cochineal). Pewarna merah dari serangga. MUI memfatwakan Halal, namun sebagian ulama lain mengharamkan." },
+      "E140": { status: "Syubhat", desc: "Chlorophylls. Pewarna hijau, kadang diekstrak menggunakan pelarut yang meragukan atau turunan hewani." },
+      "E141": { status: "Syubhat", desc: "Klorofil. Titik kritis pada pelarut yang digunakan." },
+      "E153": { status: "Syubhat", desc: "Carbon Black. Bisa berasal dari arang tulang hewan (bisa jadi tulang babi)." },
+      "E422": { status: "Syubhat", desc: "Gliserol / Gliserin. Bisa berasal dari tanaman (Halal) atau dari lemak babi/hewani (Haram)." },
+      "E430": { status: "Syubhat", desc: "Polyoxyethene. Emulsifier dari asam lemak yang bisa berasal dari babi/hewan." },
+      "E431": { status: "Syubhat", desc: "Polyoxyl Stearate. Lemak buatan yang sumbernya bisa dari nabati atau hewani." },
+      "E432": { status: "Syubhat", desc: "Polysorbate 20. Sama seperti turunan asam lemak lainnya, rawan tercampur lemak babi." },
+      "E433": { status: "Syubhat", desc: "Polysorbate 80. Sangat sering ditanyakan, rawan turunan hewani." },
+      "E434": { status: "Syubhat", desc: "Polysorbate 40. Rawan turunan hewani/babi." },
+      "E435": { status: "Syubhat", desc: "Polysorbate 60. Rawan turunan hewani/babi." },
+      "E436": { status: "Syubhat", desc: "Polysorbate 65. Rawan turunan hewani/babi." },
+      "E441": { status: "Syubhat", desc: "Gelatin. Haram jika dari babi. Halal jika dari sapi/ikan yang disembelih secara syar'i." },
+      "E470": { status: "Syubhat", desc: "Asam Lemak. Sangat kritis karena mayoritas asam lemak di industri bisa bersumber dari hewan/babi." },
+      "E471": { status: "Syubhat", desc: "Emulsifier pengembang kue/roti. Bisa dari nabati (soya) atau hewani (babi). Wajib ada logo Halal MUI!" },
+      "E472": { status: "Syubhat", desc: "Ester Asam Lemak (termasuk E472a-f). Sama kritisnya dengan E471." },
+      "E473": { status: "Syubhat", desc: "Sucrose Esters. Turunan asam lemak." },
+      "E474": { status: "Syubhat", desc: "Sucroglycerides. Turunan asam lemak." },
+      "E475": { status: "Syubhat", desc: "Polyglycerol Esters. Turunan asam lemak." },
+      "E476": { status: "Syubhat", desc: "PGPR (sering di cokelat). Biasanya nabati (Halal), tapi ada kemungkinan hewani jadi tetap Syubhat." },
+      "E481": { status: "Syubhat", desc: "Sodium Stearoyl Lactylate. Asam laktat bisa dari media fermentasi hewani." },
+      "E482": { status: "Syubhat", desc: "Calcium Stearoyl Lactylate. Sama seperti E481." },
+      "E491": { status: "Syubhat", desc: "Sorbitan Monostearate. Turunan asam lemak." },
+      "E492": { status: "Syubhat", desc: "Sorbitan Tristearate. Turunan asam lemak." },
+      "E542": { status: "Haram", desc: "Edible Bone Phosphate. Diekstrak langsung dari tulang hewan (rawan dari tulang babi)." },
+      "E631": { status: "Syubhat", desc: "Inosinat (Penguat Rasa). Sering diekstrak dari daging babi atau ikan. Jika dari ikan maka Halal." },
+      "E635": { status: "Syubhat", desc: "Ribonukleotida (Penguat Rasa di Mi Instan). Bisa dari turunan babi. Pastikan ada logo Halal." },
+      "E904": { status: "Halal/Syubhat", desc: "Shellac. Pelapis mengkilap (biasanya pada permen/buah). MUI memfatwakan Halal (berasal dari ekskresi kutu)." }
+    };
+
+    function cekEnumber() {
+      let input = document.getElementById('enumber-input').value.toUpperCase().trim();
+      if (!input) return;
+      
+      // Tambahkan 'E' di depan jika user cuma ngetik angka (misal '471' jadi 'E471')
+      if (/^[0-9]+$/.test(input)) {
+        input = 'E' + input;
+        document.getElementById('enumber-input').value = input;
+      }
+
+      const resCard = document.getElementById('enumber-card');
+      const resIcon = document.getElementById('enumber-icon');
+      const resCode = document.getElementById('enumber-code');
+      const resStatus = document.getElementById('enumber-status');
+      const resDesc = document.getElementById('enumber-desc');
+
+      resCode.innerText = input;
+
+      if (syubhatHaramList[input]) {
+        const data = syubhatHaramList[input];
+        resDesc.innerText = data.desc;
+        
+        if (data.status === "Haram") {
+          resCard.className = "rounded-2xl p-5 border text-center shadow-sm bg-red-50 border-red-200";
+          resIcon.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-500"></i>`;
+          resStatus.className = "inline-block px-3 py-1 rounded-full text-xs font-bold mb-3 bg-red-100 text-red-700";
+          resStatus.innerText = "HARAM / SANGAT KRITIS";
+          resCode.className = "text-2xl font-black mb-1 text-red-700";
+          resDesc.className = "text-sm leading-relaxed text-red-800";
+        } else {
+          resCard.className = "rounded-2xl p-5 border text-center shadow-sm bg-amber-50 border-amber-200";
+          resIcon.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-500"></i>`;
+          resStatus.className = "inline-block px-3 py-1 rounded-full text-xs font-bold mb-3 bg-amber-100 text-amber-700";
+          resStatus.innerText = "SYUBHAT (MERAGUKAN)";
+          resCode.className = "text-2xl font-black mb-1 text-amber-700";
+          resDesc.className = "text-sm leading-relaxed text-amber-800";
+        }
+      } else {
+        // Jika tidak ada di list kritis, kita anggap InsyaAllah Halal
+        resCard.className = "rounded-2xl p-5 border text-center shadow-sm bg-emerald-50 border-emerald-200";
+        resIcon.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-500"></i>`;
+        resStatus.className = "inline-block px-3 py-1 rounded-full text-xs font-bold mb-3 bg-emerald-100 text-emerald-700";
+        resStatus.innerText = "INSYA ALLAH HALAL AMAN";
+        resCode.className = "text-2xl font-black mb-1 text-emerald-700";
+        resDesc.innerText = "Kode ini tidak termasuk dalam daftar bahan titik kritis tinggi (turunan babi/hewani). Biasanya bersumber dari tanaman atau sintesis kimiawi.";
+        resDesc.className = "text-sm leading-relaxed text-emerald-800";
+      }
+
+      document.getElementById('enumber-result').classList.remove('hidden');
       if (navigator.vibrate) navigator.vibrate(50);
     }
 
