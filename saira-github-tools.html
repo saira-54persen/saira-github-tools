@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saira Tools - Aplikasi Ibadah</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: transparent; /* Transparent so it blends with Iframe Modal */
+      margin: 0;
+      padding: 0;
+    }
+    .tool-section {
+      display: none; /* Hide all by default */
+    }
+    .tool-section.active {
+      display: block;
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+  </style>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            saira: {
+              light: '#0D7C3E',
+              dark: '#0B4D3C',
+              gold: '#D4A843'
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="text-gray-800 p-4 sm:p-6 min-h-screen">
+
+  <!-- ==========================================
+       APP 1: TRACKER QADHA (HUTANG IBADAH)
+  =========================================== -->
+  <div id="app-qadha" class="tool-section max-w-md mx-auto">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+      
+      <!-- Header -->
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-orange-50 text-orange-500 mb-3 shadow-inner">
+          <i class="fa-solid fa-clock-rotate-left text-2xl"></i>
+        </div>
+        <h2 class="text-2xl font-black text-gray-900">Tracker Qadha</h2>
+        <p class="text-xs text-gray-500 mt-1">Catat dan lunasi hutang ibadahmu perlahan-lahan.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="flex bg-gray-100 rounded-xl p-1 mb-6">
+        <button onclick="switchQadhaTab('puasa')" id="tab-puasa" class="flex-1 py-2 rounded-lg text-sm font-bold transition-all bg-white text-saira-light shadow-sm">Puasa</button>
+        <button onclick="switchQadhaTab('sholat')" id="tab-sholat" class="flex-1 py-2 rounded-lg text-sm font-bold transition-all text-gray-500 hover:text-gray-700">Sholat</button>
+      </div>
+
+      <!-- Content: Puasa -->
+      <div id="content-puasa" class="block">
+        <div class="bg-orange-50/50 rounded-2xl p-5 border border-orange-100/50 mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-gray-700">Hutang Puasa Ramadhan</span>
+            <button onclick="resetQadha('puasa')" class="text-xs text-red-400 hover:text-red-600 font-bold"><i class="fa-solid fa-rotate-right"></i> Reset</button>
+          </div>
+          <div class="flex items-center justify-between bg-white rounded-xl p-3 shadow-sm border border-gray-100">
+            <button onclick="updateQadha('puasa', -1)" class="w-10 h-10 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-600 text-lg font-bold flex items-center justify-center transition-colors"><i class="fa-solid fa-minus"></i></button>
+            <div class="text-center">
+              <span id="count-puasa" class="text-4xl font-black text-gray-900">0</span>
+              <span class="text-xs text-gray-500 block">Hari</span>
+            </div>
+            <button onclick="updateQadha('puasa', 1)" class="w-10 h-10 rounded-lg bg-saira-light hover:bg-saira-dark text-white text-lg font-bold flex items-center justify-center shadow-md shadow-green-500/30 transition-colors"><i class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+        <div class="bg-blue-50 rounded-xl p-4 text-xs text-blue-700 flex gap-3">
+          <i class="fa-solid fa-circle-info mt-0.5"></i>
+          <p>Niat Qadha Puasa: <em>"Nawaitu shauma ghadin 'an qadha'i fardhi ramadhaana lillaahi ta'aalaa."</em></p>
+        </div>
+      </div>
+
+      <!-- Content: Sholat -->
+      <div id="content-sholat" class="hidden">
+        <p class="text-xs text-center text-gray-500 mb-4">Catat jumlah waktu sholat fardhu yang terlewat.</p>
+        
+        <!-- List Sholat -->
+        <div class="space-y-3">
+          <!-- Subuh -->
+          <div class="flex items-center justify-between bg-white border border-gray-100 rounded-xl p-3 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-cyan-50 text-cyan-500 flex items-center justify-center text-xs"><i class="fa-solid fa-cloud-sun"></i></div>
+              <span class="font-bold text-gray-700 text-sm">Subuh</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="updateQadha('sholat_subuh', -1)" class="w-7 h-7 rounded bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center"><i class="fa-solid fa-minus text-[10px]"></i></button>
+              <span id="count-sholat_subuh" class="font-black text-gray-900 w-4 text-center">0</span>
+              <button onclick="updateQadha('sholat_subuh', 1)" class="w-7 h-7 rounded bg-saira-light text-white hover:bg-saira-dark flex items-center justify-center"><i class="fa-solid fa-plus text-[10px]"></i></button>
+            </div>
+          </div>
+          
+          <!-- Dzuhur -->
+          <div class="flex items-center justify-between bg-white border border-gray-100 rounded-xl p-3 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center text-xs"><i class="fa-solid fa-sun"></i></div>
+              <span class="font-bold text-gray-700 text-sm">Dzuhur</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="updateQadha('sholat_dzuhur', -1)" class="w-7 h-7 rounded bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center"><i class="fa-solid fa-minus text-[10px]"></i></button>
+              <span id="count-sholat_dzuhur" class="font-black text-gray-900 w-4 text-center">0</span>
+              <button onclick="updateQadha('sholat_dzuhur', 1)" class="w-7 h-7 rounded bg-saira-light text-white hover:bg-saira-dark flex items-center justify-center"><i class="fa-solid fa-plus text-[10px]"></i></button>
+            </div>
+          </div>
+
+          <!-- Ashar -->
+          <div class="flex items-center justify-between bg-white border border-gray-100 rounded-xl p-3 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center text-xs"><i class="fa-solid fa-cloud-sun"></i></div>
+              <span class="font-bold text-gray-700 text-sm">Ashar</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="updateQadha('sholat_ashar', -1)" class="w-7 h-7 rounded bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center"><i class="fa-solid fa-minus text-[10px]"></i></button>
+              <span id="count-sholat_ashar" class="font-black text-gray-900 w-4 text-center">0</span>
+              <button onclick="updateQadha('sholat_ashar', 1)" class="w-7 h-7 rounded bg-saira-light text-white hover:bg-saira-dark flex items-center justify-center"><i class="fa-solid fa-plus text-[10px]"></i></button>
+            </div>
+          </div>
+
+          <!-- Maghrib -->
+          <div class="flex items-center justify-between bg-white border border-gray-100 rounded-xl p-3 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-indigo-50 text-indigo-500 flex items-center justify-center text-xs"><i class="fa-solid fa-moon"></i></div>
+              <span class="font-bold text-gray-700 text-sm">Maghrib</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="updateQadha('sholat_maghrib', -1)" class="w-7 h-7 rounded bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center"><i class="fa-solid fa-minus text-[10px]"></i></button>
+              <span id="count-sholat_maghrib" class="font-black text-gray-900 w-4 text-center">0</span>
+              <button onclick="updateQadha('sholat_maghrib', 1)" class="w-7 h-7 rounded bg-saira-light text-white hover:bg-saira-dark flex items-center justify-center"><i class="fa-solid fa-plus text-[10px]"></i></button>
+            </div>
+          </div>
+
+          <!-- Isya -->
+          <div class="flex items-center justify-between bg-white border border-gray-100 rounded-xl p-3 shadow-sm">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 flex items-center justify-center text-xs"><i class="fa-solid fa-star-and-crescent"></i></div>
+              <span class="font-bold text-gray-700 text-sm">Isya</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <button onclick="updateQadha('sholat_isya', -1)" class="w-7 h-7 rounded bg-gray-100 text-gray-600 hover:bg-gray-200 flex items-center justify-center"><i class="fa-solid fa-minus text-[10px]"></i></button>
+              <span id="count-sholat_isya" class="font-black text-gray-900 w-4 text-center">0</span>
+              <button onclick="updateQadha('sholat_isya', 1)" class="w-7 h-7 rounded bg-saira-light text-white hover:bg-saira-dark flex items-center justify-center"><i class="fa-solid fa-plus text-[10px]"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       ROUTER & LOGIC JAVASCRIPT
+  =========================================== -->
+  <script>
+    // 1. ROUTER SYSTEM (Menentukan app apa yang dibuka berdasarkan ?app=...)
+    function initApp() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const appName = urlParams.get('app');
+
+      if (appName) {
+        // Cari element dengan id app-{appName}
+        const activeApp = document.getElementById(`app-${appName}`);
+        if (activeApp) {
+          activeApp.classList.add('active');
+        } else {
+          document.body.innerHTML = '<div class="text-center p-10"><h2 class="text-2xl font-bold text-gray-400">Aplikasi belum tersedia / sedang dikembangkan.</h2></div>';
+        }
+      } else {
+        document.body.innerHTML = '<div class="text-center p-10"><h2 class="text-2xl font-bold text-gray-400">Pilih aplikasi dari Saira Hub.</h2></div>';
+      }
+    }
+
+    // 2. QADHA TRACKER LOGIC
+    function switchQadhaTab(tab) {
+      // Styling Tab Buttons
+      const btnPuasa = document.getElementById('tab-puasa');
+      const btnSholat = document.getElementById('tab-sholat');
+      const contentPuasa = document.getElementById('content-puasa');
+      const contentSholat = document.getElementById('content-sholat');
+
+      if (tab === 'puasa') {
+        btnPuasa.className = 'flex-1 py-2 rounded-lg text-sm font-bold transition-all bg-white text-saira-light shadow-sm';
+        btnSholat.className = 'flex-1 py-2 rounded-lg text-sm font-bold transition-all text-gray-500 hover:text-gray-700';
+        contentPuasa.classList.remove('hidden');
+        contentSholat.classList.add('hidden');
+      } else {
+        btnSholat.className = 'flex-1 py-2 rounded-lg text-sm font-bold transition-all bg-white text-saira-light shadow-sm';
+        btnPuasa.className = 'flex-1 py-2 rounded-lg text-sm font-bold transition-all text-gray-500 hover:text-gray-700';
+        contentSholat.classList.remove('hidden');
+        contentPuasa.classList.add('hidden');
+      }
+    }
+
+    // Fungsi Update Nilai
+    function updateQadha(key, change) {
+      let current = parseInt(localStorage.getItem(`saira_qadha_${key}`)) || 0;
+      current += change;
+      if (current < 0) current = 0; // Tidak boleh minus
+      
+      localStorage.setItem(`saira_qadha_${key}`, current);
+      document.getElementById(`count-${key}`).innerText = current;
+
+      // Haptic feedback (Getar kalau di HP)
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
+
+    // Fungsi Load Data Awal
+    function loadQadhaData() {
+      const keys = ['puasa', 'sholat_subuh', 'sholat_dzuhur', 'sholat_ashar', 'sholat_maghrib', 'sholat_isya'];
+      keys.forEach(key => {
+        let val = localStorage.getItem(`saira_qadha_${key}`) || 0;
+        const el = document.getElementById(`count-${key}`);
+        if(el) el.innerText = val;
+      });
+    }
+
+    // Fungsi Reset
+    function resetQadha(key) {
+      if(confirm('Yakin ingin mereset catatan ini jadi 0?')) {
+        localStorage.setItem(`saira_qadha_${key}`, 0);
+        document.getElementById(`count-${key}`).innerText = 0;
+      }
+    }
+
+    // Inisialisasi saat halaman dimuat
+    window.onload = () => {
+      initApp();
+      loadQadhaData(); // Load data Qadha jika app Qadha dibuka
+    };
+  </script>
+</body>
+</html>
