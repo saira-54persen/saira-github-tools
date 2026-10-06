@@ -485,11 +485,36 @@
 
     // 4. AUDIO RUQYAH LOGIC
     const ruqyahPlaylist = [
-      { id: "001", title: "Al-Fatihah", subtitle: "Pembuka (Ayat Ruqyah Inti)" },
-      { id: "002", title: "Al-Baqarah", subtitle: "Pengusir Setan & Sihir" },
-      { id: "112", title: "Al-Ikhlas", subtitle: "Kemurnian Keesaan Allah" },
-      { id: "113", title: "Al-Falaq", subtitle: "Perlindungan dari Kejahatan" },
-      { id: "114", title: "An-Nas", subtitle: "Perlindungan dari Bisikan Setan" }
+      { 
+        title: "Al-Fatihah", 
+        subtitle: "Pembuka (Ayat Ruqyah Inti)",
+        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/001.mp3"
+      },
+      { 
+        title: "Ayat Kursi", 
+        subtitle: "Al-Baqarah 255 (Penjagaan Total)",
+        url: "https://cdn.equran.id/audio-partial/Misyari-Rasyid-Al-Afasi/002255.mp3"
+      },
+      { 
+        title: "Al-Baqarah (Full)", 
+        subtitle: "Pengusir Setan & Sihir dari Rumah",
+        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/002.mp3"
+      },
+      { 
+        title: "Al-Ikhlas", 
+        subtitle: "Kemurnian Keesaan Allah",
+        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/112.mp3"
+      },
+      { 
+        title: "Al-Falaq", 
+        subtitle: "Perlindungan dari Kejahatan",
+        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/113.mp3"
+      },
+      { 
+        title: "An-Nas", 
+        subtitle: "Perlindungan dari Bisikan Setan",
+        url: "https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/114.mp3"
+      }
     ];
 
     let currentRuqyahIdx = 0;
@@ -533,7 +558,7 @@
       // Update UI
       document.getElementById('ruqyah-title').innerText = track.title;
       document.getElementById('ruqyah-subtitle').innerText = track.subtitle;
-      audioRuqyah.src = `https://cdn.equran.id/audio-full/Misyari-Rasyid-Al-Afasi/${track.id}.mp3`;
+      audioRuqyah.src = track.url;
       
       // Update Playlist Style
       ruqyahPlaylist.forEach((_, i) => {
