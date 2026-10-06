@@ -704,6 +704,179 @@
 
 
   <!-- ==========================================
+       APP 12: KUIS TRIVIA ISLAMI
+  =========================================== -->
+  <div id="app-kuis" class="tool-section max-w-md mx-auto h-full flex flex-col justify-center">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100 text-center">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 text-indigo-600 mb-4 shadow-inner">
+        <i class="fa-solid fa-gamepad text-3xl"></i>
+      </div>
+      <h2 class="text-2xl font-black text-gray-900 mb-2">Kuis Islami</h2>
+      
+      <div id="kuis-start-screen">
+        <p class="text-xs text-gray-500 mb-6">Uji wawasan agama Islam kamu dengan 5 pertanyaan acak yang seru!</p>
+        <button onclick="startKuis()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-2xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2">
+          Mulai Kuis Sekarang <i class="fa-solid fa-play"></i>
+        </button>
+      </div>
+
+      <div id="kuis-play-screen" class="hidden">
+        <div class="flex justify-between items-center mb-4">
+          <span class="text-xs font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full" id="kuis-progress">Soal 1/5</span>
+          <span class="text-xs font-bold text-emerald-500 bg-emerald-50 px-3 py-1 rounded-full" id="kuis-score-live"><i class="fa-solid fa-star"></i> 0</span>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-6 leading-relaxed" id="kuis-question">Pertanyaan di sini?</h3>
+        
+        <div class="space-y-3" id="kuis-options">
+          <!-- Opsi akan digenerate via JS -->
+        </div>
+      </div>
+
+      <div id="kuis-result-screen" class="hidden">
+        <div class="text-6xl mb-4" id="kuis-result-emoji">🎉</div>
+        <h3 class="text-2xl font-black text-gray-900 mb-2">Skor Akhir: <span id="kuis-final-score" class="text-indigo-600">100</span></h3>
+        <p class="text-sm text-gray-500 mb-6 font-medium" id="kuis-result-message">MasyaAllah, wawasan kamu luar biasa!</p>
+        <button onclick="startKuis()" class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 font-bold py-3.5 rounded-xl transition-all active:scale-95 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-rotate-right"></i> Main Lagi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       APP 13: KALKULATOR UMUR HIJRIAH
+  =========================================== -->
+  <div id="app-umur" class="tool-section max-w-md mx-auto">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-fuchsia-100 text-fuchsia-600 mb-4 shadow-inner">
+          <i class="fa-solid fa-cake-candles text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-black text-gray-900">Usia Hijriah</h2>
+        <p class="text-xs text-gray-500 mt-2">Ketahui umur asli berdasarkan kalender Islam</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-2">Tanggal Lahir Masehi</label>
+          <input type="date" id="umur-dob" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-fuchsia-500 font-medium font-mono">
+        </div>
+
+        <button onclick="hitungUmurHijriah()" class="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 text-sm mt-4">
+          <i class="fa-solid fa-magnifying-glass"></i> Cek Umur Saya
+        </button>
+
+        <div id="umur-result" class="hidden animate-[fadeIn_0.3s_ease-out] mt-6">
+          <div class="bg-fuchsia-50 border border-fuchsia-100 rounded-xl p-5 text-center">
+             <p class="text-xs font-bold text-fuchsia-800/60 mb-2 uppercase tracking-wider">Usia Masehi</p>
+             <h3 class="text-2xl font-black text-gray-700 mb-4" id="res-umur-masehi">0 Tahun</h3>
+             
+             <div class="w-full h-px bg-fuchsia-200/50 mb-4"></div>
+
+             <p class="text-xs font-bold text-fuchsia-800/60 mb-2 uppercase tracking-wider">Usia Hijriah (Asli)</p>
+             <h3 class="text-4xl font-black text-fuchsia-600 mb-2" id="res-umur-hijriah">0 Tahun</h3>
+             <p class="text-[10px] text-fuchsia-900 font-medium leading-relaxed bg-fuchsia-100 p-2 rounded-lg">*Tahun Hijriah lebih pendek 11 hari dari Masehi, jadi umur kita pasti lebih tua di kalender Islam.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       APP 14: KARTU ASMAUL HUSNA
+  =========================================== -->
+  <div id="app-asmaulhusna" class="tool-section max-w-md mx-auto h-full flex flex-col justify-center">
+    <div class="bg-gradient-to-br from-[#1A0B2E] to-[#4C1D95] rounded-3xl p-6 shadow-2xl relative overflow-hidden border border-rose-500/30 text-center">
+      
+      <div class="absolute -top-10 -right-10 opacity-10">
+        <i class="fa-solid fa-certificate text-9xl text-rose-300"></i>
+      </div>
+
+      <div class="relative z-10 flex flex-col items-center">
+        <div class="flex justify-between w-full mb-6 items-center">
+          <button onclick="prevAsma()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+          <div class="text-xs font-bold text-rose-300 bg-rose-500/20 px-3 py-1 rounded-full border border-rose-500/30" id="asma-counter">
+            1 / 99
+          </div>
+          <button onclick="nextAsma()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <div class="w-full bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 mb-8 min-h-[200px] flex flex-col justify-center items-center shadow-inner">
+          <div class="text-5xl font-amiri text-rose-300 leading-loose drop-shadow-[0_0_15px_rgba(251,113,133,0.5)] mb-4" id="asma-arabic">
+            الرَّحْمَنُ
+          </div>
+          <div class="text-xl font-bold text-white mb-2 tracking-wide" id="asma-latin">
+            Ar-Rahman
+          </div>
+          <div class="text-sm font-medium text-rose-200/80 italic" id="asma-indo">
+            Maha Pengasih
+          </div>
+        </div>
+
+        <button onclick="randomAsma()" class="text-xs font-bold text-white/70 hover:text-white flex items-center gap-2 transition-colors">
+          <i class="fa-solid fa-shuffle"></i> Acak Nama
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================
+       APP 15: TABUNGAN KURBAN
+  =========================================== -->
+  <div id="app-kurban" class="tool-section max-w-md mx-auto">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-orange-100 text-orange-600 mb-4 shadow-inner">
+          <i class="fa-solid fa-cow text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-black text-gray-900">Tabungan Kurban</h2>
+        <p class="text-xs text-gray-500 mt-2">Rencanakan kurbanmu dari sekarang</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-2">Target Harga Kurban (Sapi/Kambing)</label>
+          <div class="relative">
+            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">Rp</span>
+            <input type="number" id="kurban-harga" placeholder="3000000" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl pl-12 pr-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 font-bold font-mono">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-2">Sisa Waktu Menabung (Bulan)</label>
+          <div class="relative">
+            <input type="number" id="kurban-bulan" placeholder="10" class="w-full bg-gray-50 border border-gray-200 text-gray-900 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 font-bold font-mono">
+          </div>
+          <p class="text-[10px] text-gray-400 mt-1">*Berapa bulan lagi menuju Idul Adha?</p>
+        </div>
+
+        <button onclick="hitungKurban()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 text-sm mt-4">
+          <i class="fa-solid fa-piggy-bank"></i> Hitung Tabungan
+        </button>
+
+        <div id="kurban-result" class="hidden animate-[fadeIn_0.3s_ease-out] mt-6">
+          <div class="bg-orange-50 border border-orange-100 rounded-xl p-5 text-center">
+             <p class="text-xs font-bold text-orange-800/60 mb-2 uppercase tracking-wider">Harus Nabung Sebesar</p>
+             <h3 class="text-3xl font-black text-orange-600 mb-2" id="res-kurban-bulan">Rp 0</h3>
+             <p class="text-xs text-orange-900 font-medium mb-4">Setiap Bulan</p>
+             
+             <div class="w-full h-px bg-orange-200/50 mb-4"></div>
+
+             <p class="text-[10px] text-orange-700/80 font-bold uppercase tracking-wider mb-1">Atau setara dengan</p>
+             <h4 class="text-lg font-black text-gray-700" id="res-kurban-hari">Rp 0 <span class="text-[10px] font-medium text-gray-500">/ hari</span></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
        ROUTER & LOGIC JAVASCRIPT
   =========================================== -->
   <script>
@@ -1601,12 +1774,158 @@
       }, 300);
     }
 
+    // ==========================================
+    // LOGIKA APP 12: KUIS TRIVIA ISLAMI
+    // ==========================================
+    const dbKuis = [
+      { q: "Siapakah Nabi yang diberi mukjizat bisa berbicara dengan hewan?", options: ["Nabi Musa AS", "Nabi Sulaiman AS", "Nabi Isa AS", "Nabi Ibrahim AS"], ans: 1 },
+      { q: "Surat apakah yang dijuluki sebagai 'Jantung Al-Qur'an'?", options: ["Al-Baqarah", "Ar-Rahman", "Yasin", "Al-Mulk"], ans: 2 },
+      { q: "Malaikat yang bertugas meniup sangkakala pada hari kiamat adalah?", options: ["Malaikat Jibril", "Malaikat Mikail", "Malaikat Israfil", "Malaikat Izrail"], ans: 2 },
+      { q: "Berapa tahun Nabi Muhammad SAW menerima wahyu Al-Qur'an?", options: ["20 Tahun", "21 Tahun", "22 Tahun", "23 Tahun"], ans: 3 },
+      { q: "Siapakah sahabat Nabi yang mendapat julukan 'Pedang Allah yang Terhunus'?", options: ["Umar bin Khattab", "Ali bin Abi Thalib", "Khalid bin Walid", "Hamzah bin Abdul Muthalib"], ans: 2 }
+    ];
+    let kuisIndex = 0, kuisScore = 0;
+
+    function startKuis() {
+      kuisIndex = 0; kuisScore = 0;
+      document.getElementById('kuis-start-screen').classList.add('hidden');
+      document.getElementById('kuis-result-screen').classList.add('hidden');
+      document.getElementById('kuis-play-screen').classList.remove('hidden');
+      renderKuis();
+    }
+
+    function renderKuis() {
+      if (kuisIndex >= dbKuis.length) {
+        showKuisResult();
+        return;
+      }
+      const data = dbKuis[kuisIndex];
+      document.getElementById('kuis-progress').innerText = `Soal ${kuisIndex + 1}/${dbKuis.length}`;
+      document.getElementById('kuis-score-live').innerHTML = `<i class="fa-solid fa-star"></i> ${kuisScore}`;
+      document.getElementById('kuis-question').innerText = data.q;
+      
+      const optContainer = document.getElementById('kuis-options');
+      optContainer.innerHTML = '';
+      data.options.forEach((opt, i) => {
+        optContainer.innerHTML += `
+          <button onclick="jawabKuis(${i})" class="w-full text-left bg-gray-50 hover:bg-indigo-50 border border-gray-200 hover:border-indigo-200 text-gray-700 font-bold py-3 px-4 rounded-xl transition-all">
+            ${opt}
+          </button>
+        `;
+      });
+    }
+
+    function jawabKuis(idx) {
+      if (idx === dbKuis[kuisIndex].ans) kuisScore += 20;
+      kuisIndex++;
+      renderKuis();
+    }
+
+    function showKuisResult() {
+      document.getElementById('kuis-play-screen').classList.add('hidden');
+      document.getElementById('kuis-result-screen').classList.remove('hidden');
+      document.getElementById('kuis-final-score').innerText = kuisScore;
+      
+      let msg = "MasyaAllah, wawasan kamu luar biasa!";
+      let emoji = "🎉";
+      if (kuisScore < 60) { msg = "Terus semangat belajar agama ya!"; emoji = "📚"; }
+      if (kuisScore === 100) { msg = "Sempurna! Kamu pantas dapat gelar ustadz/ustadzah kecil!"; emoji = "🏆"; }
+      
+      document.getElementById('kuis-result-message').innerText = msg;
+      document.getElementById('kuis-result-emoji').innerText = emoji;
+    }
+
+    // ==========================================
+    // LOGIKA APP 13: UMUR HIJRIAH
+    // ==========================================
+    function hitungUmurHijriah() {
+      const dobStr = document.getElementById('umur-dob').value;
+      if (!dobStr) return;
+      
+      const dob = new Date(dobStr);
+      const today = new Date();
+      
+      const diffTime = Math.abs(today - dob);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      const masehiTahun = Math.floor(diffDays / 365.25);
+      const hijriahTahun = Math.floor(diffDays / 354.36); // Rata-rata hari di kalender hijriah
+      
+      document.getElementById('res-umur-masehi').innerText = masehiTahun + " Tahun";
+      document.getElementById('res-umur-hijriah').innerText = hijriahTahun + " Tahun";
+      
+      document.getElementById('umur-result').classList.remove('hidden');
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
+
+    // ==========================================
+    // LOGIKA APP 14: KARTU ASMAUL HUSNA
+    // ==========================================
+    const asmaData = [
+      { ar: "الرَّحْمَنُ", la: "Ar-Rahman", id: "Maha Pengasih" },
+      { ar: "الرَّحِيمُ", la: "Ar-Rahim", id: "Maha Penyayang" },
+      { ar: "الْمَلِكُ", la: "Al-Malik", id: "Maha Merajai/Memerintah" },
+      { ar: "الْقُدُّوسُ", la: "Al-Quddus", id: "Maha Suci" },
+      { ar: "السَّلَامُ", la: "As-Salam", id: "Maha Memberi Kesejahteraan" },
+      { ar: "الْمُؤْمِنُ", la: "Al-Mu'min", id: "Maha Memberi Keamanan" },
+      { ar: "الْمُهَيْمِنُ", la: "Al-Muhaimin", id: "Maha Pemelihara" },
+      { ar: "الْعَزِيزُ", la: "Al-Aziz", id: "Maha Perkasa" },
+      { ar: "الْجَبَّارُ", la: "Al-Jabbar", id: "Maha Kuasa" },
+      { ar: "الْمُتَكَبِّرُ", la: "Al-Mutakabbir", id: "Maha Megah" }
+      // Sample 10 for demo, normally 99
+    ];
+    let asmaIndex = 0;
+
+    function renderAsma() {
+      const data = asmaData[asmaIndex];
+      document.getElementById('asma-counter').innerText = `${asmaIndex + 1} / ${asmaData.length}`;
+      document.getElementById('asma-arabic').innerText = data.ar;
+      document.getElementById('asma-latin').innerText = data.la;
+      document.getElementById('asma-indo').innerText = data.id;
+    }
+
+    function nextAsma() {
+      asmaIndex = (asmaIndex + 1) % asmaData.length;
+      renderAsma();
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+
+    function prevAsma() {
+      asmaIndex = (asmaIndex - 1 + asmaData.length) % asmaData.length;
+      renderAsma();
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+
+    function randomAsma() {
+      asmaIndex = Math.floor(Math.random() * asmaData.length);
+      renderAsma();
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
+
+    // ==========================================
+    // LOGIKA APP 15: TABUNGAN KURBAN
+    // ==========================================
+    function hitungKurban() {
+      const harga = parseInt(document.getElementById('kurban-harga').value) || 0;
+      const bulan = parseInt(document.getElementById('kurban-bulan').value) || 1;
+      
+      const perBulan = Math.ceil(harga / bulan);
+      const perHari = Math.ceil(perBulan / 30);
+      
+      document.getElementById('res-kurban-bulan').innerText = "Rp " + perBulan.toLocaleString('id-ID');
+      document.getElementById('res-kurban-hari').innerHTML = "Rp " + perHari.toLocaleString('id-ID') + ` <span class="text-[10px] font-medium text-gray-500">/ hari</span>`;
+      
+      document.getElementById('kurban-result').classList.remove('hidden');
+      if (navigator.vibrate) navigator.vibrate(50);
+    }
+
     // Inisialisasi saat halaman dimuat
     window.onload = () => {
       initApp();
       loadQadhaData(); 
       initRuqyah();
       initSilsilah();
+      renderAsma();
       
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('app') === 'countdown') {
