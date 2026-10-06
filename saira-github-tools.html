@@ -548,6 +548,61 @@
 
 
   <!-- ==========================================
+       APP 9: KALKULATOR FIDYAH
+  =========================================== -->
+  <div id="app-fidyah" class="tool-section max-w-md mx-auto">
+    <div class="bg-white rounded-3xl p-6 shadow-xl border border-gray-100">
+      <div class="text-center mb-6">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mb-4 shadow-inner">
+          <i class="fa-solid fa-wheat-awn text-3xl"></i>
+        </div>
+        <h2 class="text-2xl font-black text-gray-900">Kalkulator Fidyah</h2>
+        <p class="text-xs text-gray-500 mt-2">Hitung fidyah utang puasa dengan takaran beras/uang</p>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-2">Jumlah Utang Puasa (Hari)</label>
+          <input type="number" id="fidyah-hari" value="1" min="1" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all font-bold">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-2">Pilih Metode Pembayaran</label>
+          <div class="grid grid-cols-2 gap-3 mb-2">
+            <button id="btn-fidyah-beras" onclick="setFidyahType('beras')" class="py-2.5 px-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-700 font-bold flex items-center justify-center gap-2 transition-all text-xs">
+              <i class="fa-solid fa-bowl-rice"></i> Beras
+            </button>
+            <button id="btn-fidyah-uang" onclick="setFidyahType('uang')" class="py-2.5 px-4 rounded-xl border-2 border-transparent bg-gray-50 text-gray-500 hover:bg-gray-100 font-bold flex items-center justify-center gap-2 transition-all text-xs">
+              <i class="fa-solid fa-rupiah-sign"></i> Uang
+            </button>
+          </div>
+        </div>
+
+        <!-- Optional Input untuk Uang -->
+        <div id="fidyah-uang-input" class="hidden">
+           <label class="block text-xs font-bold text-gray-700 mb-2">Nominal per Hari</label>
+           <input type="number" id="fidyah-nominal" value="60000" class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all font-bold">
+           <p class="text-[10px] text-gray-500 mt-1 italic">*Standar SK BAZNAS RI: Rp 60.000/hari/jiwa</p>
+        </div>
+
+        <button onclick="hitungFidyah()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all active:scale-95 flex items-center justify-center gap-2 text-sm mt-4">
+          <i class="fa-solid fa-calculator"></i> Hitung Fidyah
+        </button>
+
+        <!-- Hasil Output -->
+        <div id="fidyah-result" class="hidden animate-[fadeIn_0.3s_ease-out] mt-6">
+          <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-5 text-center">
+             <p class="text-xs font-bold text-emerald-800/60 mb-2 uppercase tracking-wider">Total Yang Harus Dibayar</p>
+             <h3 class="text-3xl font-black text-emerald-600 mb-2" id="res-fidyah-total">0</h3>
+             <p class="text-xs text-emerald-900 font-medium leading-relaxed" id="res-fidyah-desc">Untuk 1 hari puasa yang ditinggalkan</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
        ROUTER & LOGIC JAVASCRIPT
   =========================================== -->
   <script>
@@ -1269,6 +1324,51 @@
       document.getElementById('cd-hours').innerText = hours.toString().padStart(2, '0');
       document.getElementById('cd-mins').innerText = minutes.toString().padStart(2, '0');
       document.getElementById('cd-secs').innerText = seconds.toString().padStart(2, '0');
+    }
+
+    // ==========================================
+    // LOGIKA APP 9: KALKULATOR FIDYAH
+    // ==========================================
+    let currentFidyahType = 'beras';
+
+    function setFidyahType(type) {
+      currentFidyahType = type;
+      const btnBeras = document.getElementById('btn-fidyah-beras');
+      const btnUang = document.getElementById('btn-fidyah-uang');
+      const inputUang = document.getElementById('fidyah-uang-input');
+
+      if (type === 'beras') {
+        btnBeras.className = "py-2.5 px-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-700 font-bold flex items-center justify-center gap-2 transition-all text-xs";
+        btnUang.className = "py-2.5 px-4 rounded-xl border-2 border-transparent bg-gray-50 text-gray-500 hover:bg-gray-100 font-bold flex items-center justify-center gap-2 transition-all text-xs";
+        inputUang.classList.add('hidden');
+      } else {
+        btnUang.className = "py-2.5 px-4 rounded-xl border-2 border-emerald-500 bg-emerald-50 text-emerald-700 font-bold flex items-center justify-center gap-2 transition-all text-xs";
+        btnBeras.className = "py-2.5 px-4 rounded-xl border-2 border-transparent bg-gray-50 text-gray-500 hover:bg-gray-100 font-bold flex items-center justify-center gap-2 transition-all text-xs";
+        inputUang.classList.remove('hidden');
+      }
+    }
+
+    function hitungFidyah() {
+      const hari = parseInt(document.getElementById('fidyah-hari').value) || 0;
+      if (hari <= 0) return;
+
+      const resTotal = document.getElementById('res-fidyah-total');
+      const resDesc = document.getElementById('res-fidyah-desc');
+
+      if (currentFidyahType === 'beras') {
+        // Menurut BAZNAS: 1 kg beras per hari.
+        const totalBeras = hari * 1; 
+        resTotal.innerText = totalBeras + " Kg Beras";
+        resDesc.innerHTML = `Disalurkan kepada <b>fakir miskin</b> sebagai ganti <b>${hari} hari</b> puasa.`;
+      } else {
+        const nominal = parseInt(document.getElementById('fidyah-nominal').value) || 60000;
+        const totalUang = hari * nominal;
+        resTotal.innerText = "Rp " + totalUang.toLocaleString('id-ID');
+        resDesc.innerHTML = `Disalurkan kepada <b>fakir miskin</b> sebagai ganti <b>${hari} hari</b> puasa.<br><span class="text-[10px] mt-1 block opacity-75">(Asumsi Rp ${nominal.toLocaleString('id-ID')} / hari)</span>`;
+      }
+
+      document.getElementById('fidyah-result').classList.remove('hidden');
+      if (navigator.vibrate) navigator.vibrate(50);
     }
 
     // Inisialisasi saat halaman dimuat
