@@ -283,9 +283,10 @@
         <div class="flex items-center justify-center gap-6">
           <button onclick="prevRuqyah()" class="text-gray-400 hover:text-green-600 transition-colors active:scale-95"><i class="fa-solid fa-backward-step text-xl"></i></button>
           <button onclick="toggleRuqyah()" id="ruqyah-play-btn" class="w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full flex items-center justify-center text-xl shadow-lg shadow-green-500/40 transition-transform active:scale-95">
-            <i class="fa-solid fa-play ml-1"></i>
+            <i class="fa-solid fa-pause"></i>
           </button>
           <button onclick="nextRuqyah()" class="text-gray-400 hover:text-green-600 transition-colors active:scale-95"><i class="fa-solid fa-forward-step text-xl"></i></button>
+          <button onclick="toggleLoopRuqyah()" id="ruqyah-loop-btn" class="text-gray-400 hover:text-green-600 transition-colors active:scale-95 ml-2" title="Ulangi Terus (Loop)"><i class="fa-solid fa-repeat text-lg"></i></button>
         </div>
       </div>
 
@@ -596,6 +597,18 @@
       audioRuqyah.pause();
       isRuqyahPlaying = false;
       document.getElementById('ruqyah-play-btn').innerHTML = '<i class="fa-solid fa-play ml-1"></i>';
+    }
+
+    function toggleLoopRuqyah() {
+      audioRuqyah.loop = !audioRuqyah.loop;
+      const loopBtn = document.getElementById('ruqyah-loop-btn');
+      if (audioRuqyah.loop) {
+        loopBtn.classList.remove('text-gray-400');
+        loopBtn.classList.add('text-green-600');
+      } else {
+        loopBtn.classList.add('text-gray-400');
+        loopBtn.classList.remove('text-green-600');
+      }
     }
 
     function nextRuqyah() {
